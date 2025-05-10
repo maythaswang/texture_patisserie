@@ -9,7 +9,6 @@ from .utils import validator
 
 from collections import deque
 
-
 class MATERIAL_OT_bake_textures(bpy.types.Operator):
     bl_idname = "autobake.bake_texture"
     bl_label = "Auto bake textures"
@@ -41,22 +40,12 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 continue
 
             for bake_name, (bake_type_enabled, bake_type, pass_filter) in bake_configs.texture_passes.items():
+                # Ignore disabled passes
+                if not bake_type_enabled:
+                    continue
 
-                bake_image= texture_generator.create_texture_single(obj.name, bake_name)
-                for mat_id, slot in enumerate(obj.material_slots):
-                    material = slot.material
-                    mat_valid, err_msg = validator.is_bakeable_mat(material)
-                    if not mat_valid: 
-                        self.report({"ERROR"}, err_msg)
-                        continue
-                        
-                    # Duplicate material
-                    dupe_mat = material.copy()                
-                    dupe_mat.name = f"{material.name}_BAKE" # Might change suffix to resolution or something
-                    self.material_stack.append((mat_id, material, dupe_mat))
-
-                    texture_generator.link_material(obj, mat_id, dupe_mat)
-                    texture_generator.create_texture_node(dupe_mat, bake_image)
+                # Duplicate material
+                self._duplicate_material(obj, bake_name)
 
                 # Baking routine
                 try:
@@ -66,17 +55,11 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 except Exception as e:
                     self.report({'ERROR'}, f"{e}")
 
-                for mat_id, slot in enumerate(obj.material_slots):
-                    # Restore original material 
-                    original_id, original_mat, dupe_mat = self.material_stack.pop()
-                    texture_generator.link_material(obj, original_id, original_mat)
-                    bpy.data.materials.remove(dupe_mat)
+                # Restoring material
+                self._restore_material(obj)
 
-
-            self.report({'INFO'}, f"Baking material {material.name}")
             has_valid_mesh = True
-
-     
+    
         # No material was baked
         if not has_valid_mesh:
             self.report({'ERROR'}, "No valid mesh")
@@ -85,3 +68,34 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         # Baking success
         self.report({'INFO'}, "Baking Complete!")
         return {"FINISHED"}
+
+
+    # Right now we duplicate material for every texture type we bake
+    # TODO: Fix this by separating and duplicate only once
+    def _duplicate_material(self, obj, bake_name):
+        """Duplicate material for writing systems"""
+        bake_image= texture_generator.create_texture_single(obj.name, bake_name)
+        for mat_id, slot in enumerate(obj.material_slots):
+            material = slot.material
+            mat_valid, err_msg = validator.is_bakeable_mat(material)
+            if not mat_valid: 
+                self.report({"ERROR"}, err_msg)
+                continue
+                
+            # Duplicate material
+            dupe_mat = material.copy()                
+            dupe_mat.name = f"{material.name}_BAKE" # Might change suffix to resolution or something
+            self.material_stack.append((mat_id, material, dupe_mat))
+
+            texture_generator.link_material(obj, mat_id, dupe_mat)
+            texture_generator.create_texture_node(dupe_mat, bake_image)
+
+            self.report({'INFO'}, f"Baking material {material.name}, {bake_name}")
+
+    def _restore_material(self, obj):
+        """Restore the original material to the slot"""
+        for mat_id, slot in enumerate(obj.material_slots):
+            # Restore original material 
+            original_id, original_mat, dupe_mat = self.material_stack.pop()
+            texture_generator.link_material(obj, original_id, original_mat)
+            bpy.data.materials.remove(dupe_mat)
