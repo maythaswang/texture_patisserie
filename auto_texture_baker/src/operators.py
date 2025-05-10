@@ -4,6 +4,7 @@ This module contains operators and utility functions for baking materials
 import bpy
 from . import validator
 
+
 from collections import deque
 
 ### TODO: THIS IS SUCH A MESS, THE AMOUNT OF CLEANING UP WILL BE MASSIVE
@@ -18,16 +19,31 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
     # Material stack for restoring popped out materials
     material_stack = deque()
 
-    def execute(self, context):
-
-        # Load settings
+    def _load_bake_settings(self, context):
+        """Load settings for baking"""
         settings = context.scene.pg_bake_settings
-        bake_settings = {
+        texture_settings = {
             "albedo":    (settings.albedo, "DIFFUSE", {"COLOR"}),
             "roughness": (settings.roughness, "ROUGHNESS", {"NONE"}),
             "normal":    (settings.normal, "NORMAL", {"NONE"}),
             "metallic":  (settings.metallic, "EMIT", {"NONE"}),
         }
+        return texture_settings
+    
+    # def _load_save_settings(self, context): 
+    #     settings = context.scene.pg_bake_save_settings
+    #     save_settings = {
+    #         "bake_width":    bpy.props.IntProperty(name="bake_width", default=1024, description="Output texture width")
+    #         "bake_height":   bpy.props.IntProperty(name="bake_height", default=1024, description="Output texture height")
+    #         "save_to_disk":  bpy.props.BoolProperty(name="save_to_disk", default=False)
+    #         "output_path":   bpy.props.StringProperty(name="output_path",subtype="DIR_PATH", default= "./baked"
+    #     }
+    #     return save_settings
+
+    def execute(self, context):
+
+        # Load settings
+        texture_settings = self._load_bake_settings(context)
 
         has_valid_mesh = False
 
@@ -51,7 +67,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     self.report({"ERROR"}, err_msg)
                     continue
 
-                for bake_name, (bake_type_enabled, bake_type, pass_filter) in bake_settings.items():
+                for bake_name, (bake_type_enabled, bake_type, pass_filter) in texture_settings.items():
 
                     bake_image= create_texture_single(obj.name, bake_name)
                     for mat_id, slot in enumerate(obj.material_slots):
@@ -114,7 +130,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     try:
                         link_material(obj, mat_id, dupe_mat)
                         obj.active_material_index = mat_id
-                        bake_textures(dupe_mat, bake_settings, obj, True)
+                        bake_textures(dupe_mat, texture_settings, obj, True)
                         # bake_textures(material, bake_settings, obj)
 
                     except Exception as e:
@@ -137,6 +153,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         self.report({'INFO'}, "Baking Complete!")
         return {"FINISHED"}
 
+# Set material to material slot at mat_id
 def link_material(obj, mat_id, material) -> None: 
     """Link material to object"""
     obj.data.materials[mat_id] = material
