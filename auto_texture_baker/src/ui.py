@@ -23,3 +23,15 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         row.prop(scene.pg_bake_settings , "roughness")
         row.prop(scene.pg_bake_settings , "metallic")
         row.prop(scene.pg_bake_settings , "normal")
+
+        layout.label(text="Texture Resolution")
+        row = layout.row()
+        row.prop(scene.pg_bake_settings, "bake_width" )
+        row.prop(scene.pg_bake_settings, "bake_height" )
+        
+        
+        layout.label(text="Output Location")
+        row = layout.row()
+        row.prop(scene.pg_bake_settings, "save_to_disk" , text="Save to disk")
+        row = layout.row()
+        row.prop(scene.pg_bake_settings, "output_path", text="")

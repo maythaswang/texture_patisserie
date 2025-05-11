@@ -15,4 +15,4 @@ class PG_bake_settings(bpy.types.PropertyGroup):
     bake_width: bpy.props.IntProperty(name="bake_width", default=1024, description="Output texture width")
     bake_height: bpy.props.IntProperty(name="bake_height", default=1024, description="Output texture height")
     save_to_disk: bpy.props.BoolProperty(name="save_to_disk", default=False)
-    output_path: bpy.props.StringProperty(name="output_path",subtype="DIR_PATH", default= "./baked")
+    output_path: bpy.props.StringProperty(name="output_path",subtype="DIR_PATH", default= "//baked_textures/")

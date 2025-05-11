@@ -4,7 +4,7 @@ This module contains operators and utility functions for baking materials
 import bpy
 
 from .config import bake_config
-from .texture_system import texture_generator
+from .texture_system import texture_generator,save_texture
 from .utils import validator
 
 from collections import deque
@@ -22,14 +22,24 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
         # Load settings
         settings = context.scene.pg_bake_settings
-        bake_configs = bake_config.BakeConfig(settings)
+        cfg = bake_config.BakeConfig(settings)
         has_valid_mesh = False
+        print(cfg.bake_height, cfg.bake_width, cfg.output_path, cfg.save_to_disk)
 
         # Verify that at least 1 object is selected
         selected = bpy.context.selected_objects
         if(not selected or len(selected) == 0):
             self.report({"ERROR"}, "No object selected")
             return {"CANCELLED"}
+        
+        status = True
+        if cfg.save_to_disk:
+            status, err = save_texture.create_save_directory(cfg.output_path)
+            print(status)
+
+        if not status: 
+            self.report({"ERROR"}, "Failed to find or create save directory")
+            return {"CANCELLED"} 
 
         # Iterate through the list of selected objects 
         for obj in selected:
@@ -41,17 +51,19 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
             duplicate_materials = self._duplicate_materials(obj)
 
-            for bake_name, (bake_type_enabled, bake_type, pass_filter) in bake_configs.texture_passes.items():
+            for bake_name, (bake_type_enabled, bake_type, pass_filter) in cfg.texture_passes.items():
                 # Ignore disabled passes
                 if not bake_type_enabled:
                     continue
 
-                self._generate_texture(obj, duplicate_materials, bake_name)
+                bake_image = self._generate_texture(obj, cfg, duplicate_materials, bake_name)
 
                 # Baking routine
                 try:
                     if bake_type_enabled:
-                        bpy.ops.object.bake(type=bake_type,pass_filter=pass_filter, use_split_materials=False) 
+                        bpy.ops.object.bake(type=bake_type,pass_filter=pass_filter, use_split_materials=False)
+                        if cfg.save_to_disk:
+                            save_texture.save_texture_to_disk(cfg, bake_name, obj.name, bake_image)
 
                 except Exception as e:
                     self.report({'ERROR'}, f"{e}")
@@ -59,7 +71,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             # Restoring material
             self._restore_material(obj)
             has_valid_mesh = True
-    
+
         # No material was baked
         if not has_valid_mesh:
             self.report({'ERROR'}, "No valid mesh")
@@ -68,9 +80,6 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         # Baking success
         self.report({'INFO'}, "Baking Complete!")
         return {"FINISHED"}
-
-    def _prepare_texture(self, mat_id, material, bake_image):
-        pass
 
     def _duplicate_materials(self, obj):
         """Duplicate material to be baked"""
@@ -82,7 +91,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             if not mat_valid: 
                 self.report({"ERROR"}, err_msg)
                 continue
-            
+
             # Duplicate material
             dupe_mat = material.copy()
             dupe_mat.name = f"BAKE_{material.name}"
@@ -95,19 +104,21 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
         return duplicate_materials
 
-    def _generate_texture(self, obj, duplicate_materials, bake_name):  
+    def _generate_texture(self, obj, cfg, duplicate_materials, bake_name):  
         """Generate new texture to store the baked material"""       
         # Putting this here will bake multiple mats to same texture
-        bake_image= texture_generator.create_texture_single(obj.name, bake_name)
+        bake_image= texture_generator.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height)
 
         for material in duplicate_materials:
             texture_generator.create_texture_node(material, bake_image)
             self.report({'INFO'}, f"Generating texture {material.name}, {bake_name}")
 
+        return bake_image
+
     def _restore_material(self, obj):
         """Restore the original material to the slot"""
-        for mat_id, slot in enumerate(obj.material_slots):
-            # Restore original material 
+        for _ in range(len(obj.material_slots)):
+            # Restore original material
             original_id, original_mat, dupe_mat = self.material_stack.pop()
             texture_generator.link_material(obj, original_id, original_mat)
             bpy.data.materials.remove(dupe_mat)
