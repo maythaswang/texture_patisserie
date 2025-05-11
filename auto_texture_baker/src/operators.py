@@ -39,13 +39,14 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 self.report({"ERROR"}, err_msg)
                 continue
 
+            duplicate_materials = self._duplicate_materials(obj)
+
             for bake_name, (bake_type_enabled, bake_type, pass_filter) in bake_configs.texture_passes.items():
                 # Ignore disabled passes
                 if not bake_type_enabled:
                     continue
 
-                # Duplicate material
-                self._duplicate_material(obj, bake_name)
+                self._generate_texture(obj, duplicate_materials, bake_name)
 
                 # Baking routine
                 try:
@@ -55,9 +56,8 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 except Exception as e:
                     self.report({'ERROR'}, f"{e}")
 
-                # Restoring material
-                self._restore_material(obj)
-
+            # Restoring material
+            self._restore_material(obj)
             has_valid_mesh = True
     
         # No material was baked
@@ -69,28 +69,40 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         self.report({'INFO'}, "Baking Complete!")
         return {"FINISHED"}
 
+    def _prepare_texture(self, mat_id, material, bake_image):
+        pass
 
-    # Right now we duplicate material for every texture type we bake
-    # TODO: Fix this by separating and duplicate only once
-    def _duplicate_material(self, obj, bake_name):
-        """Duplicate material for writing systems"""
-        bake_image= texture_generator.create_texture_single(obj.name, bake_name)
+    def _duplicate_materials(self, obj):
+        """Duplicate material to be baked"""
+        duplicate_materials = []
         for mat_id, slot in enumerate(obj.material_slots):
+            # Material Validation
             material = slot.material
             mat_valid, err_msg = validator.is_bakeable_mat(material)
             if not mat_valid: 
                 self.report({"ERROR"}, err_msg)
                 continue
-                
+            
             # Duplicate material
-            dupe_mat = material.copy()                
-            dupe_mat.name = f"{material.name}_BAKE" # Might change suffix to resolution or something
+            dupe_mat = material.copy()
+            dupe_mat.name = f"BAKE_{material.name}"
             self.material_stack.append((mat_id, material, dupe_mat))
+            duplicate_materials.append((dupe_mat))
 
+            # Link Material
             texture_generator.link_material(obj, mat_id, dupe_mat)
-            texture_generator.create_texture_node(dupe_mat, bake_image)
+            self.report({'INFO'}, f"Duplicating material {material.name}")
 
-            self.report({'INFO'}, f"Baking material {material.name}, {bake_name}")
+        return duplicate_materials
+
+    def _generate_texture(self, obj, duplicate_materials, bake_name):  
+        """Generate new texture to store the baked material"""       
+        # Putting this here will bake multiple mats to same texture
+        bake_image= texture_generator.create_texture_single(obj.name, bake_name)
+
+        for material in duplicate_materials:
+            texture_generator.create_texture_node(material, bake_image)
+            self.report({'INFO'}, f"Generating texture {material.name}, {bake_name}")
 
     def _restore_material(self, obj):
         """Restore the original material to the slot"""
