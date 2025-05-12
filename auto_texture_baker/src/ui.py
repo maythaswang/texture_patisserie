@@ -31,7 +31,10 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
 
         ### Output Settings ###
         layout.label(text="Output Settings")
-        
+
+        # Render Device
+        layout.prop(scene.pg_bake_settings, "render_device", text="Render device")
+
         # Render Samples
         row = layout.row()
         row.label(text="Render Samples")

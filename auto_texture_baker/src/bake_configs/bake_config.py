@@ -9,6 +9,8 @@ class BakeConfig:
         self.save_to_disk = settings.save_to_disk
         self.output_path = settings.output_path
         self.render_samples = settings.render_samples
+        self.render_device = settings.render_device
+        self.file_type = settings.file_type
 
         self.texture_passes = self._load_texture_settings(settings)
 

@@ -18,18 +18,28 @@ class PG_bake_settings(bpy.types.PropertyGroup):
     output_path: bpy.props.StringProperty(name="output_path",subtype="DIR_PATH", default= "//baked_textures/")
 
     render_samples: bpy.props.IntProperty(name="render_samples", default=10, description="Render samples", min=1)
+    render_device_items = [
+        ("CPU","CPU","Use CPU for baking"),
+        ("GPU","GPU","Use GPU for baking")
+    ]
+
+    render_device: bpy.props.EnumProperty(
+        name="Rendering Device",
+        description="Device to use for rendering",
+        items=render_device_items,
+        default="CPU"
+    )
 
     file_type_items = [
-        ('PNG', "PNG", "Portable Network Graphics (PNG)"),
-        ('JPEG', "JPEG", "Joint Photographic Experts Group (JPEG)"),
-        ('TIFF', "TIFF", "Tagged Image File Format (TIFF)"),
-        ('BMP', "BMP", "Bitmap Image Format (BMP)"),
-        ('EXR', "EXR", "OpenEXR Image Format (EXR)")
+        ("PNG", "PNG", "Portable Network Graphics (PNG)"),
+        ("JPEG", "JPEG", "Joint Photographic Experts Group (JPEG)"),
+        ("TIFF", "TIFF", "Tagged Image File Format (TIFF)"),
+        ("BMP", "BMP", "Bitmap Image Format (BMP)"),
     ]
 
     file_type: bpy.props.EnumProperty(
         name="File Type", 
         description="Choose the file type for saving the texture",
         items=file_type_items, 
-        default='PNG'
+        default="PNG"
     )

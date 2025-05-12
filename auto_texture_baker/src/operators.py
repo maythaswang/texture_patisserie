@@ -38,7 +38,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
         # Load Render Configurations 
         render_state = self._store_render_state(context)
-        self._set_render_state(context,cfg.render_samples)
+        self._set_render_state(context,cfg)
 
 
         if not status: 
@@ -77,9 +77,9 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 try:
                     if bake_type_enabled:
                         bpy.ops.object.bake(type=bake_type,pass_filter=pass_filter, use_split_materials=False)
-                        if cfg.save_to_disk:
-                            save_texture.save_texture_to_disk(cfg, bake_name, obj.name, bake_image)
 
+                        if cfg.save_to_disk:
+                            save_texture.save_texture_to_disk(cfg, bake_name, obj.name, cfg.file_type, bake_image)
                 except Exception as e:
                     self.report({'ERROR'}, f"{e}")
 
@@ -141,10 +141,12 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             material_editor.link_material(obj, original_id, original_mat)
             bpy.data.materials.remove(dupe_mat)
 
-    def _set_render_state(self, context, render_samples):
+    def _set_render_state(self, context, cfg):
         """Set render state for baking"""
         context.scene.render.engine = "CYCLES"
-        context.scene.cycles.samples = render_samples
+        context.scene.cycles.samples = cfg.render_samples
+        context.scene.cycles.device = cfg.render_device
+        context.scene.render.image_settings.file_format = cfg.file_type
 
         
     def _store_render_state(self, context):
@@ -152,6 +154,8 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         render_state = {
             "engine": context.scene.render.engine,
             "samples": context.scene.cycles.samples,
+            "device": context.scene.cycles.device,
+            "file_type": context.scene.render.image_settings.file_format
         }
         return render_state
     
@@ -159,3 +163,5 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         """Restore render state to default"""
         context.scene.render.engine = render_state["engine"]
         context.scene.cycles.samples = render_state["samples"]
+        context.scene.cycles.device = render_state["device"]
+        context.scene.render.image_settings.file_format = render_state["file_type"] 
