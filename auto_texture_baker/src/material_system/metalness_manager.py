@@ -61,11 +61,12 @@ class MetallicConnection:
         """Links metallic node directly to output """
         self.node_tree.links.new(self.metallic_node.outputs[0], self.output_node.inputs['Surface'])
 
-
-        # TODO: We have to deal with linking back BSDF to output after this stage.
-
     def prepare_bake_others(self):
         """Unlink metallic node and set value to 0"""
+        
+        # Restore BSDF Connection
+        self.node_tree.links.new(self.principled_bsdf.outputs[0], self.output_node.inputs['Surface'])
+        
         # Find metallic link
         metallic_link = None
         for link in self.node_tree.links:

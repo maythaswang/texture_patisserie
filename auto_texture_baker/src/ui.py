@@ -13,10 +13,13 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
     bl_context = "render"
 
     def draw(self, context):
+        ### Setup ### 
         layout = self.layout
         scene = context.scene
         layout.operator("autobake.bake_texture", text="Bake Selected Maps")
-        layout.label(text="Select Texture to bake!")
+
+        ### Output Textures ###
+        layout.label(text="Textures to bake")
 
         row = layout.row()
         row.prop(scene.pg_bake_settings , "albedo")
@@ -24,17 +27,25 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         row.prop(scene.pg_bake_settings , "metallic")
         row.prop(scene.pg_bake_settings , "normal")
 
-        layout.label(text="Texture Resolution")
+        layout.separator(type="LINE")
+
+        ### Output Settings ###
+        layout.label(text="Output Settings")
+        
+        # Render Samples
         row = layout.row()
-        row.prop(scene.pg_bake_settings, "bake_width" )
-        row.prop(scene.pg_bake_settings, "bake_height" )
+        row.label(text="Render Samples")
+        row.prop(scene.pg_bake_settings, "render_samples", text="")
+
+        # Texture resolution
+        row = layout.row()
+        row.label(text="Texture Resolution")
+        row.prop(scene.pg_bake_settings, "bake_width", text="width")
+        row.prop(scene.pg_bake_settings, "bake_height", text="height")
         
-        
-        layout.label(text="Output Location")
+        # Save Settings
+        row = layout.row()
+        row.prop(scene.pg_bake_settings, "file_type", text="File Type")
         row = layout.row()
         row.prop(scene.pg_bake_settings, "save_to_disk" , text="Save to disk")
-        row = layout.row()
         row.prop(scene.pg_bake_settings, "output_path", text="")
-
-        layout.label(text="Render Settings")
-        layout.prop(scene.pg_bake_settings, "render_samples", text="Render Samples")

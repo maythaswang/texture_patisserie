@@ -84,7 +84,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     self.report({'ERROR'}, f"{e}")
 
             # Restoring material
-            # self._restore_material(obj)
+            self._restore_material(obj)
             has_valid_mesh = True
         
         # Restore Render state 

@@ -17,7 +17,7 @@ class BakeConfig:
         texture_passes = {
             "albedo":    (settings.albedo, "DIFFUSE", {"COLOR"}, "sRGB"),
             "roughness": (settings.roughness, "ROUGHNESS", {"NONE"}, "Non-Color"),
-            "normal":    (settings.normal, "NORMAL", {"NONE"}, "Non-Color"),
             "metallic":  (settings.metallic, "EMIT", {"NONE"}, "Non-Color"),
+            "normal":    (settings.normal, "NORMAL", {"NONE"}, "Non-Color"),
         }
         return texture_passes
