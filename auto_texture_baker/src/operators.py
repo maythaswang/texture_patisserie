@@ -138,7 +138,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         for _ in range(len(obj.material_slots)):
             # Restore original material
             original_id, original_mat, dupe_mat = self.material_stack.pop()
-            texture_generator.link_material(obj, original_id, original_mat)
+            material_editor.link_material(obj, original_id, original_mat)
             bpy.data.materials.remove(dupe_mat)
 
     def _set_render_state(self, context, render_samples):
