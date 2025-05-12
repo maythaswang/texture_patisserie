@@ -51,12 +51,12 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
             duplicate_materials = self._duplicate_materials(obj)
 
-            for bake_name, (bake_type_enabled, bake_type, pass_filter) in cfg.texture_passes.items():
+            for bake_name, (bake_type_enabled, bake_type, pass_filter, color_space) in cfg.texture_passes.items():
                 # Ignore disabled passes
                 if not bake_type_enabled:
                     continue
 
-                bake_image = self._generate_texture(obj, cfg, duplicate_materials, bake_name)
+                bake_image = self._generate_texture(obj, cfg, duplicate_materials, bake_name, color_space)
 
                 # Baking routine
                 try:
@@ -69,7 +69,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     self.report({'ERROR'}, f"{e}")
 
             # Restoring material
-            self._restore_material(obj)
+            # self._restore_material(obj)
             has_valid_mesh = True
 
         # No material was baked
@@ -104,10 +104,10 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
         return duplicate_materials
 
-    def _generate_texture(self, obj, cfg, duplicate_materials, bake_name):  
+    def _generate_texture(self, obj, cfg, duplicate_materials, bake_name, color_space):  
         """Generate new texture to store the baked material"""       
         # Putting this here will bake multiple mats to same texture
-        bake_image= texture_generator.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height)
+        bake_image= texture_generator.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
 
         for material in duplicate_materials:
             texture_generator.create_texture_node(material, bake_image)

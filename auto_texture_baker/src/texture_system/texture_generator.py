@@ -7,11 +7,11 @@ def link_material(obj, mat_id, material) -> None:
     obj.material_slots[mat_id].material = material
 
 ### MIXED VERSION
-def create_texture_single(name, bake_type, width, height):
+def create_texture_single(name, bake_type, width, height, color_space):
     """Generate new texture for baking all mats of same obj"""
     # Generate textures
-    # width, height = 1024, 1024  # Texture size (can be customized)
     bake_image = bpy.data.images.new(f"tmp_{name}_{bake_type}", width=width, height=height)
+    bake_image.colorspace_settings.name = color_space
     return bake_image
 
 def create_texture_node(material, bake_image):
