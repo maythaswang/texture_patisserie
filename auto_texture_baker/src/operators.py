@@ -4,7 +4,7 @@ This module contains operators and utility functions for baking materials
 import bpy
 
 from .bake_configs import bake_config
-from .texture_system import texture_generator,save_texture
+from .material_system import texture_generator,save_texture,metalness_manager, material_editor
 from .utils import validator
 
 from collections import deque
@@ -54,11 +54,22 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 continue
 
             duplicate_materials = self._duplicate_materials(obj)
+            
+            # Prepare to modify metallic connection
+            metallic_connection = metalness_manager.MetallicConnection(duplicate_materials[0]) # DEBUG
+            metallic_connection.prepare_metallic_values()
 
             for bake_name, (bake_type_enabled, bake_type, pass_filter, color_space) in cfg.texture_passes.items():
                 # Ignore disabled passes
                 if not bake_type_enabled:
                     continue
+
+                # Edit Metallic links
+                if bake_name == "metallic": 
+                    metallic_connection.prepare_bake_metallic()
+                else:
+                    metallic_connection.prepare_bake_others()
+
 
                 bake_image = self._generate_texture(obj, cfg, duplicate_materials, bake_name, color_space)
 
@@ -73,7 +84,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     self.report({'ERROR'}, f"{e}")
 
             # Restoring material
-            self._restore_material(obj)
+            # self._restore_material(obj)
             has_valid_mesh = True
         
         # Restore Render state 
@@ -106,7 +117,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             duplicate_materials.append((dupe_mat))
 
             # Link Material
-            texture_generator.link_material(obj, mat_id, dupe_mat)
+            material_editor.link_material(obj, mat_id, dupe_mat)
             self.report({'INFO'}, f"Duplicating material {material.name}")
 
         return duplicate_materials
@@ -130,14 +141,14 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             texture_generator.link_material(obj, original_id, original_mat)
             bpy.data.materials.remove(dupe_mat)
 
-
-
     def _set_render_state(self, context, render_samples):
+        """Set render state for baking"""
         context.scene.render.engine = "CYCLES"
         context.scene.cycles.samples = render_samples
 
         
     def _store_render_state(self, context):
+        """Store previous render state"""
         render_state = {
             "engine": context.scene.render.engine,
             "samples": context.scene.cycles.samples,
@@ -145,5 +156,6 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         return render_state
     
     def _restore_render_state(self,context,render_state): 
+        """Restore render state to default"""
         context.scene.render.engine = render_state["engine"]
         context.scene.cycles.samples = render_state["samples"]

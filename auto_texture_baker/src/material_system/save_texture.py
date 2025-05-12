@@ -1,7 +1,6 @@
 """
 This module contains functions for saving texture files  
 """
-
 import os
 
 def save_texture_to_disk(cfg, bake_type, obj_name, texture):

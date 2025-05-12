@@ -3,13 +3,6 @@ This module handles generating texture and texture nodes for baking
 """
 import bpy
 
-# Set material to material slot at mat_id
-# TODO: Move this to another module
-def link_material(obj, mat_id, material) -> None:
-    """Link material to object"""
-    obj.data.materials[mat_id] = material
-    obj.material_slots[mat_id].material = material
-
 def create_texture_single(name, bake_type, width, height, color_space):
     """Generate new texture for baking all mats of same obj"""
     bake_image = bpy.data.images.new(f"tmp_{name}_{bake_type}", width=width, height=height)
