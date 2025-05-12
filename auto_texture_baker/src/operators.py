@@ -55,9 +55,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
             duplicate_materials = self._duplicate_materials(obj)
             
-            # Prepare to modify metallic connection
-            metallic_connection = metalness_manager.MetallicConnection(duplicate_materials[0]) # DEBUG
-            metallic_connection.prepare_metallic_values()
+
 
             for bake_name, (bake_type_enabled, bake_type, pass_filter, color_space) in cfg.texture_passes.items():
                 # Ignore disabled passes
@@ -65,10 +63,11 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     continue
 
                 # Edit Metallic links
-                if bake_name == "metallic": 
-                    metallic_connection.prepare_bake_metallic()
-                else:
-                    metallic_connection.prepare_bake_others()
+                for _, metallic_connection in duplicate_materials:
+                    if bake_name == "metallic": 
+                        metallic_connection.prepare_bake_metallic()
+                    else:
+                        metallic_connection.prepare_bake_others()
 
 
                 bake_image = self._generate_texture(obj, cfg, duplicate_materials, bake_name, color_space)
@@ -114,7 +113,12 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             dupe_mat = material.copy()
             dupe_mat.name = f"BAKE_{material.name}"
             self.material_stack.append((mat_id, material, dupe_mat))
-            duplicate_materials.append((dupe_mat))
+
+            # Prepare to modify metallic connection
+            metallic_connection = metalness_manager.MetallicConnection(dupe_mat) # DEBUG
+            metallic_connection.prepare_metallic_values()
+
+            duplicate_materials.append((dupe_mat, metallic_connection))
 
             # Link Material
             material_editor.link_material(obj, mat_id, dupe_mat)
@@ -127,7 +131,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         # Putting this here will bake multiple mats to same texture
         bake_image= texture_generator.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
 
-        for material in duplicate_materials:
+        for material, _ in duplicate_materials:
             texture_generator.create_texture_node(material, bake_image)
             self.report({'INFO'}, f"Generating texture {material.name}, {bake_name}")
 
