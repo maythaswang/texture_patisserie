@@ -3,7 +3,7 @@ This module contains operators and utility functions for baking materials
 """
 import bpy
 
-from .config import bake_config
+from .bake_configs import bake_config
 from .texture_system import texture_generator,save_texture
 from .utils import validator
 
@@ -24,18 +24,22 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         settings = context.scene.pg_bake_settings
         cfg = bake_config.BakeConfig(settings)
         has_valid_mesh = False
-        print(cfg.bake_height, cfg.bake_width, cfg.output_path, cfg.save_to_disk)
 
         # Verify that at least 1 object is selected
         selected = bpy.context.selected_objects
         if(not selected or len(selected) == 0):
             self.report({"ERROR"}, "No object selected")
             return {"CANCELLED"}
-        
+
         status = True
         if cfg.save_to_disk:
             status, err = save_texture.create_save_directory(cfg.output_path)
             print(status)
+
+        # Load Render Configurations 
+        render_state = self._store_render_state(context)
+        self._set_render_state(context,cfg.render_samples)
+
 
         if not status: 
             self.report({"ERROR"}, "Failed to find or create save directory")
@@ -69,8 +73,11 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     self.report({'ERROR'}, f"{e}")
 
             # Restoring material
-            # self._restore_material(obj)
+            self._restore_material(obj)
             has_valid_mesh = True
+        
+        # Restore Render state 
+        self._restore_render_state(context,render_state)
 
         # No material was baked
         if not has_valid_mesh:
@@ -122,3 +129,21 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             original_id, original_mat, dupe_mat = self.material_stack.pop()
             texture_generator.link_material(obj, original_id, original_mat)
             bpy.data.materials.remove(dupe_mat)
+
+
+
+    def _set_render_state(self, context, render_samples):
+        context.scene.render.engine = "CYCLES"
+        context.scene.cycles.samples = render_samples
+
+        
+    def _store_render_state(self, context):
+        render_state = {
+            "engine": context.scene.render.engine,
+            "samples": context.scene.cycles.samples,
+        }
+        return render_state
+    
+    def _restore_render_state(self,context,render_state): 
+        context.scene.render.engine = render_state["engine"]
+        context.scene.cycles.samples = render_state["samples"]

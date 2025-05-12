@@ -1,7 +1,6 @@
 """
-This module contains utility functions for loading bake settings
+This module contains class for storing all baking configurations
 """
-import bpy
 
 class BakeConfig:
     def __init__(self,settings):
@@ -9,6 +8,7 @@ class BakeConfig:
         self.bake_height = settings.bake_height
         self.save_to_disk = settings.save_to_disk
         self.output_path = settings.output_path
+        self.render_samples = settings.render_samples
 
         self.texture_passes = self._load_texture_settings(settings)
 
