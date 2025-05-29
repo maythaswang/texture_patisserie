@@ -41,6 +41,8 @@ def create_save_directory(save_dir):
     try:
         abs_save_dir = bpy.path.abspath(save_dir)
         os.makedirs(abs_save_dir, exist_ok = True)
+
+    # pylint: disable=W0718
     except Exception as e:
         return False, e
 

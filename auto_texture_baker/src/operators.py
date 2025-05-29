@@ -1,8 +1,6 @@
 """
 This module contains operators and utility functions for baking materials
 """
-from collections import deque
-
 import bpy
 import auto_texture_baker.src.state_manager as state_manager
 import auto_texture_baker.src.material_system as material_system
@@ -10,7 +8,7 @@ import auto_texture_baker.src.material_system as material_system
 from .data_models import bake_cfg
 from .utils import validator
 
-
+# pylint: disable=C0103
 class MATERIAL_OT_bake_textures(bpy.types.Operator):
     bl_idname = "autobake.bake_texture"
     bl_label = "Auto bake textures"
@@ -98,6 +96,8 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                         # WARNING: Again, another bandage solution
                         if cfg.save_to_disk and cfg.bake_separately:
                             material_system.save_texture_to_disk(cfg, bake_name, BATCH_BAKE_NAME, cfg.file_type, bake_image)
+                
+                #pylint: disable=W0718
                 except Exception as e:
                     self.report({'ERROR'}, f"{e}")
 
@@ -148,6 +148,8 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                             # WARNING: Again, another bandage solution
                             if cfg.save_to_disk and cfg.bake_separately:
                                 material_system.save_texture_to_disk(cfg, bake_name, obj.name, cfg.file_type, bake_image)
+                    
+                    #pylint: disable=W0718
                     except Exception as e:
                         self.report({'ERROR'}, f"{e}")
 

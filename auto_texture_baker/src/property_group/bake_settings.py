@@ -4,11 +4,12 @@ Property Group for storing bake settings
 
 import bpy
 
+# pylint: disable=C0103
 class PG_bake_settings(bpy.types.PropertyGroup):
     """
     Property Group for bake settings
     """
-
+    
     albedo: bpy.props.BoolProperty(name="albedo", default = True)
     roughness: bpy.props.BoolProperty(name="roughness", default = True)
     metallic: bpy.props.BoolProperty(name="metallic", default = True)

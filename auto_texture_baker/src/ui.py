@@ -3,6 +3,7 @@ Bake Plugin UI
 """
 import bpy
 
+#pylint: disable=C0103
 class PROPERTIES_PT_bake_panel(bpy.types.Panel):
     """Panel for selecting nodes to bake"""
 

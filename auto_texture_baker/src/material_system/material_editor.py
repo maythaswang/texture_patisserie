@@ -3,11 +3,11 @@ This module manage setting up material connections
 """
 from typing import Any
 from collections import deque
+import bpy
 
 import auto_texture_baker.src.material_system as material_system
 import auto_texture_baker.src.utils as utils
 
-import bpy
 
 class MaterialEditor: 
     """
@@ -84,8 +84,3 @@ class MaterialEditor:
         """Link material to object"""
         obj.data.materials[mat_id] = material
         obj.material_slots[mat_id].material = material  
-
-# def link_material(obj, mat_id, material) -> None:
-#     """Link material to object"""
-#     obj.data.materials[mat_id] = material
-#     obj.material_slots[mat_id].material = material  
