@@ -70,7 +70,7 @@ class MaterialEditor:
         Add texture to nodes
         """
         for material, _ in duplicate_materials:
-            material_system.create_texture_node(material, bake_image)
+            self._create_texture_node(material, bake_image)
 
     def restore_material(self, obj):
         """Restore the original material to the slot"""
@@ -79,6 +79,28 @@ class MaterialEditor:
             original_id, original_mat, dupe_mat = self.material_stack.pop()
             self._link_material(obj, original_id, original_mat)
             bpy.data.materials.remove(dupe_mat)
+
+    def _create_texture_node(self, material, bake_image):
+        """
+        Create texture nodes in the material and hook up the image texture
+        with material and bake_image
+
+        Parameters: 
+        material(bpy.types.Material):   Material where the texture node will be created
+        bake_image(bpy.types.Image):    Image where the result is baked to 
+        """
+
+        # Create nodes 
+        nodes = material.node_tree.nodes
+        tex_image_node = nodes.new(type='ShaderNodeTexImage')
+
+        # Assign image to the texture node
+        tex_image_node.image = bake_image
+
+        # Select as active node
+        tex_image_node.select = True
+        nodes.active = tex_image_node
+
 
     def _link_material(self,obj, mat_id, material) -> None:
         """Link material to object"""

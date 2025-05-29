@@ -2,11 +2,11 @@
 This module contains operators and utility functions for baking materials
 """
 import bpy
-import auto_texture_baker.src.state_manager as state_manager
 import auto_texture_baker.src.material_system as material_system
+import auto_texture_baker.src.state_manager as state_manager
+import auto_texture_baker.src.data_models as data_models
+import auto_texture_baker.src.utils as utils
 
-from .data_models import bake_cfg
-from .utils import validator
 
 # pylint: disable=C0103
 class MATERIAL_OT_bake_textures(bpy.types.Operator):
@@ -19,9 +19,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
         # Load settings
         settings = context.scene.pg_bake_settings
-        cfg = bake_cfg.BakeCfg(settings)
-
-        # # Verify that at least 1 object is selected
+        cfg = data_models.BakeCfg(settings)
         selected = bpy.context.selected_objects
 
         # Pre Bake Routine 
@@ -34,8 +32,10 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         render_state_manager = state_manager.RenderStateManager(context,cfg)
         render_state_manager.set_bake_render_state()
 
-        # Build Material Editor
+        # Build Required components
         material_editor = material_system.MaterialEditor(context)
+        texture_manager = material_system.TextureManager(cfg.output_path)
+
         
         # WARNING, BANDAID SOLUTIONNNNNNn
         BATCH_BAKE_NAME = "batch_bake"
@@ -50,7 +50,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 if not bake_type_enabled:
                     continue 
                 
-                bake_image= material_system.create_texture_single(BATCH_BAKE_NAME, bake_name, cfg.bake_width, cfg.bake_height, color_space)
+                bake_image= texture_manager.create_texture_single(BATCH_BAKE_NAME, bake_name, cfg.bake_width, cfg.bake_height, color_space)
                 batch_texture.update({bake_name: bake_image})
 
             # Pre-Duplicate materials so we don't need to dupe k times. (where k is the number of bake types)
@@ -95,7 +95,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
                         # WARNING: Again, another bandage solution
                         if cfg.save_to_disk and cfg.bake_separately:
-                            material_system.save_texture_to_disk(cfg, bake_name, BATCH_BAKE_NAME, cfg.file_type, bake_image)
+                            texture_manager.save_texture_to_disk(cfg, bake_name, BATCH_BAKE_NAME, cfg.file_type, bake_image)
                 
                 #pylint: disable=W0718
                 except Exception as e:
@@ -111,7 +111,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             # Iterate through the list of selected objects 
             for obj in selected:
                 # Validate Object
-                obj_valid, err_msg = validator.is_bakeable_obj(obj)
+                obj_valid, err_msg = utils.is_bakeable_obj(obj)
                 if not obj_valid:
                     self.report({"ERROR"}, err_msg)
                     break
@@ -133,7 +133,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
                     # WARNING: bandage solution for now... I'll fix this later.
                     if cfg.bake_separately:
-                        bake_image= material_system.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
+                        bake_image= texture_manager.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
                     else: 
                         bake_image = batch_texture.get(bake_name)
 
@@ -147,7 +147,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                             bpy.ops.object.bake(type=bake_type,pass_filter=pass_filter, use_split_materials=False)
                             # WARNING: Again, another bandage solution
                             if cfg.save_to_disk and cfg.bake_separately:
-                                material_system.save_texture_to_disk(cfg, bake_name, obj.name, cfg.file_type, bake_image)
+                                texture_manager.save_texture_to_disk(cfg, bake_name, obj.name, cfg.file_type, bake_image)
                     
                     #pylint: disable=W0718
                     except Exception as e:
@@ -174,7 +174,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         
         # Verify that all selected objects are bakable
         for obj in selected:
-            obj_valid, err_msg = validator.is_bakeable_obj(obj)
+            obj_valid, err_msg = utils.is_bakeable_obj(obj)
             if not obj_valid:
                 return err_msg
         
@@ -184,7 +184,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         if not save_to_disk:
             return None 
         
-        status, err_msg = material_system.create_save_directory(output_path)
+        status, err_msg = utils.create_save_directory(output_path)
 
         # Cancel if failed to create or find save directory.
         if not status: 
