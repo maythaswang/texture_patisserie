@@ -48,6 +48,10 @@ class BakeCfg:
         self.output_roughness_name = settings.output_roughness_name
         self.output_metallic_name = settings.output_metallic_name
         self.output_normal_name = settings.output_normal_name
+
+        # Versioning 
+        self.overwrite_previous_save = settings.overwrite_previous_save
+        self.file_versioning_suffix = settings.file_versioning_suffix
     
     ###--------------------------- PUBLIC ---------------------------###
 

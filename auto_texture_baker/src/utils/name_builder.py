@@ -23,7 +23,7 @@ def build_texture_name(cfg, bake_pass, main_name):
         if cfg.batch_name_override:
             name = cfg.batch_name
         else:
-            name = main_name
+            name = "batch"
 
     if cfg.texture_type_name_override: 
         match bake_pass:

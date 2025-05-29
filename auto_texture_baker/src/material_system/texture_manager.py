@@ -31,15 +31,24 @@ class TextureManager:
         file_type(String)                                       :   Output file type
         texture(bpy.types.Image)                                :   Image texture
         """
+        print(FILE_TYPE_EXT[file_type]) #DEBUG
 
         # Verify if the texture is exists
         if not texture:
             return
 
-        texture_name = utils.build_texture_name(cfg, bake_type, obj_name)
         # Create file path 
+        texture_name = utils.build_texture_name(cfg, bake_type, obj_name)
         file_path = os.path.join(cfg.output_path, f"{texture_name}{FILE_TYPE_EXT[file_type]}")
-        print(FILE_TYPE_EXT[file_type])
+        if not cfg.overwrite_previous_save:
+            counter = 1
+            while(os.path.exists(file_path)):
+                file_path = os.path.join(cfg.output_path, f"{texture_name}{cfg.output_name_separator}{counter}{FILE_TYPE_EXT[file_type]}")
+                counter+= 1
+        print(cfg.overwrite_previous_save)
+
+
+
         texture.filepath_raw = file_path
         texture.save()
 

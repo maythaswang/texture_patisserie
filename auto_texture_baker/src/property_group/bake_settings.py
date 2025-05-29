@@ -88,3 +88,8 @@ class PG_bake_settings(bpy.types.PropertyGroup):
     output_roughness_name:  bpy.props.StringProperty(name="output_roughness_name", default= "roughness")
     output_metallic_name:   bpy.props.StringProperty(name="output_metallic_name", default = "metallic")
     output_normal_name:     bpy.props.StringProperty(name="output_normal_name", default = "normal")
+
+    # Versioning
+    overwrite_previous_save: bpy.props.BoolProperty(name="overwrite_previous_save", default= False)
+    file_versioning_suffix: bpy.props.StringProperty(name="file_versioning_suffix", default="")
+    

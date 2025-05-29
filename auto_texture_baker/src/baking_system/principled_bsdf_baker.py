@@ -36,9 +36,6 @@ class PrincipledBSDFBaker:
         str: String of error message if the program encounters an error, otherwise None
         """
 
-        # WARNING, BANDAID SOLUTIONNNNNNn
-        BATCH_BAKE_NAME = "batch_bake"       
-
         # Stores textures and materials for later use
         batch_textures = {}
         obj_materials = []
@@ -49,7 +46,7 @@ class PrincipledBSDFBaker:
             if not bake_type_enabled:
                 continue 
             
-            bake_image= self.texture_manager.create_texture_single(cfg,BATCH_BAKE_NAME, bake_name, cfg.bake_width, cfg.bake_height, color_space)
+            bake_image= self.texture_manager.create_texture_single(cfg, "batch", bake_name, cfg.bake_width, cfg.bake_height, color_space)
             batch_textures.update({bake_name: bake_image})
 
         # Pre-Duplicate materials so we don't need to dupe k times. (where k is the number of bake types)

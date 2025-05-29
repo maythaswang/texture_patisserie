@@ -92,3 +92,12 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
             layout.prop(pg, "output_roughness_name", text="Roughness")
             layout.prop(pg, "output_metallic_name", text="Metallic")
             layout.prop(pg, "output_normal_name", text="Normal")
+
+        layout.separator(type="LINE")
+
+        # Versioning
+        layout.label(text="Versioning")
+        layout.prop(pg, "overwrite_previous_save", text="Overwrite previous save")
+        if not pg.overwrite_previous_save:
+            layout.label(text= "File versioning suffix [eg: duplicate_V0,1,2..n ]:")
+            layout.prop(pg, "file_versioning_suffix", text="")
