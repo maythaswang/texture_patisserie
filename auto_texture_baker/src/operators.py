@@ -1,14 +1,16 @@
 """
 This module contains operators and utility functions for baking materials
 """
+from collections import deque
+
 import bpy
+import auto_texture_baker.src.state_manager as state_manager
+import auto_texture_baker.src.material_system as material_system
 
 from .data_models import bake_cfg
-from .material_system import texture_generator,save_texture,metalness_manager, material_editor
+# from .material_system import texture_generator,save_texture,metalness_manager, material_editor
 from .utils import validator
-import auto_texture_baker.src.state_manager as state_manager
 
-from collections import deque
 
 class MATERIAL_OT_bake_textures(bpy.types.Operator):
     bl_idname = "autobake.bake_texture"
@@ -16,15 +18,11 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
     bl_description = "Auto bake textures based on boxes checked"
     bl_options = {"REGISTER"}
 
-    # Material stack for restoring popped out materials
-    material_stack = deque()
-
     def execute(self, context):
 
         # Load settings
         settings = context.scene.pg_bake_settings
         cfg = bake_cfg.BakeCfg(settings)
-        print(type(cfg))
 
         # Verify that at least 1 object is selected
         selected = bpy.context.selected_objects
@@ -41,18 +39,22 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
         # Save to disk prep
         status = True
+        err = None
         if cfg.save_to_disk:
-            status, err = save_texture.create_save_directory(cfg.output_path)
-            print(status)
+            status, err = material_system.create_save_directory(cfg.output_path)
 
         # Cancel if failed to create or find save directory.
         if not status: 
             self.report({"ERROR"}, "Failed to find or create save directory")
+            print(err) # DEBUG
             return {"CANCELLED"} 
 
         # Load Render Configurations 
         render_state_manager = state_manager.RenderStateManager(context,cfg)
         render_state_manager.set_bake_render_state()
+
+        # Build Material Editor
+        material_editor = material_system.MaterialEditor(context)
         
         # WARNING, BANDAID SOLUTIONNNNNNn
         BATCH_BAKE_NAME = "batch_bake"
@@ -67,13 +69,13 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 if not bake_type_enabled:
                     continue 
                 
-                bake_image = self._generate_texture(BATCH_BAKE_NAME, cfg, bake_name, color_space)
+                bake_image= material_system.create_texture_single(BATCH_BAKE_NAME, bake_name, cfg.bake_width, cfg.bake_height, color_space)
                 batch_texture.update({bake_name: bake_image})
 
             # Pre-Duplicate materials so we don't need to dupe k times. (where k is the number of bake types)
             for obj in selected:
                 # Duplicate materials so if something went wrong we can revert without doing any damage to the real material.
-                duplicate_materials = self._duplicate_materials(obj)
+                duplicate_materials = material_editor.duplicate_material(obj)
                 obj_materials.append(duplicate_materials)
 
 
@@ -90,7 +92,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     # WARNING: bandage solution for now... I'll fix this later.
                     bake_image = batch_texture.get(bake_name)
                     # Add bake_image to material nodes
-                    self._add_texture_to_nodes(duplicate_materials,bake_image)
+                    material_editor.add_texture_to_nodes(duplicate_materials,bake_image)
 
                     # Edit Metallic links
                     for _, metallic_connection in duplicate_materials:
@@ -112,14 +114,14 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
                         # WARNING: Again, another bandage solution
                         if cfg.save_to_disk and cfg.bake_separately:
-                            save_texture.save_texture_to_disk(cfg, bake_name, BATCH_BAKE_NAME, cfg.file_type, bake_image)
+                            material_system.save_texture_to_disk(cfg, bake_name, BATCH_BAKE_NAME, cfg.file_type, bake_image)
                 except Exception as e:
                     self.report({'ERROR'}, f"{e}")
 
             ## TODO: USING A STACK DOESN"T WORK FOR THIS SO LET's DO IT THE OTHER WAY (right now did the most stupid hacky way just to get by)
             # Restoring material
             for obj in selected[::-1]:
-                self._restore_material(obj) # JUST REVERSE THE THING FOR NOW LOL
+                material_editor.restore_material(obj) # JUST REVERSE THE THING FOR NOW LOL
 
         ### STANDARD 
         else:
@@ -132,7 +134,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                     break
 
                 # Duplicate materials so if something went wrong we can revert without doing any damage to the real material.
-                duplicate_materials = self._duplicate_materials(obj)
+                duplicate_materials = material_editor.duplicate_material(obj)
                 
                 for bake_name, (bake_type_enabled, bake_type, pass_filter, color_space) in cfg.texture_passes.items():
                     # Ignore disabled passes
@@ -148,13 +150,15 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
                     # WARNING: bandage solution for now... I'll fix this later.
                     if cfg.bake_separately:
-                        bake_image = self._generate_texture(obj.name, cfg, bake_name, color_space)
+                        # bake_image = self._generate_texture(obj.name, cfg, bake_name, color_space)
+                        bake_image= material_system.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
                     else: 
                         bake_image = batch_texture.get(bake_name)
 
                     # Add bake_image to material nodes
-                    self._add_texture_to_nodes(duplicate_materials,bake_image)
-
+                    # self._add_texture_to_nodes(duplicate_materials,bake_image)
+                    material_editor.add_texture_to_nodes(duplicate_materials, bake_image)
+                    
 
                     # Baking routine
                     try:
@@ -162,12 +166,12 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                             bpy.ops.object.bake(type=bake_type,pass_filter=pass_filter, use_split_materials=False)
                             # WARNING: Again, another bandage solution
                             if cfg.save_to_disk and cfg.bake_separately:
-                                save_texture.save_texture_to_disk(cfg, bake_name, obj.name, cfg.file_type, bake_image)
+                                material_system.save_texture_to_disk(cfg, bake_name, obj.name, cfg.file_type, bake_image)
                     except Exception as e:
                         self.report({'ERROR'}, f"{e}")
 
                 # Restoring material
-                self._restore_material(obj)
+                material_editor.restore_material(obj)
 
         # Restore Render state 
         render_state_manager.restore_initial_render_state()
@@ -176,52 +180,10 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         self.report({'INFO'}, "Baking Complete!")
         return {"FINISHED"}
 
-    def _duplicate_materials(self, obj):
-        """Duplicate material to be baked"""
-        duplicate_materials = []
-        for mat_id, slot in enumerate(obj.material_slots):
-            # Material Validation
-            material = slot.material
-            mat_valid, err_msg = validator.is_bakeable_mat(material)
-            if not mat_valid: 
-                self.report({"ERROR"}, err_msg)
-                continue
+    def _bakeable_test(self): 
+        """
+        Test whether the current setup can be used for baking textures.
+        """
 
-            # Duplicate material
-            dupe_mat = material.copy()
-            dupe_mat.name = f"BAKE_{material.name}"
-            self.material_stack.append((mat_id, material, dupe_mat))
+        pass
 
-            # Prepare to modify metallic connection
-            metallic_connection = metalness_manager.MetallicConnection(dupe_mat) # DEBUG
-            metallic_connection.prepare_metallic_values()
-
-            duplicate_materials.append((dupe_mat, metallic_connection))
-
-            # Link Material
-            material_editor.link_material(obj, mat_id, dupe_mat)
-            self.report({'INFO'}, f"Duplicating material {material.name}")
-
-        return duplicate_materials
-
-    def _generate_texture(self, name, cfg, bake_name, color_space):  
-        """Generate new texture to store the baked material"""       
-        # Putting this here will bake multiple mats to same texture
-        bake_image= texture_generator.create_texture_single(name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
-
-        # for material, _ in duplicate_materials:
-            # texture_generator.create_texture_node(material, bake_image)
-
-        return bake_image
-    
-    def _add_texture_to_nodes(self, duplicate_materials, bake_image):
-        for material, _ in duplicate_materials:
-            texture_generator.create_texture_node(material, bake_image)
-
-    def _restore_material(self, obj):
-        """Restore the original material to the slot"""
-        for _ in range(len(obj.material_slots)):
-            # Restore original material
-            original_id, original_mat, dupe_mat = self.material_stack.pop()
-            material_editor.link_material(obj, original_id, original_mat)
-            bpy.data.materials.remove(dupe_mat)

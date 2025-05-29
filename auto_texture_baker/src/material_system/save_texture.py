@@ -22,6 +22,7 @@ def save_texture_to_disk(cfg, bake_type, obj_name, file_type, texture):
     texture(UNKNOWN)                                        :   Image texture
     """
 
+    print("tex" + type(texture))
     # Verify if the texture is exists
     if not texture:
         return

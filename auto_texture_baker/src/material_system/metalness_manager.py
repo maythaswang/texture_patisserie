@@ -5,6 +5,10 @@ This module handle rewrangling of metallic nodes due to issues with blender meta
 # WARNING:  Currently there is an issue on how the node is rewrangled 
 #           this requires the user to not use the same node as input to 
 #           2 or more fields of the Principled BSDF Shader
+#           Another Issue found also which is normal map leaks into albedo 
+#           When baked with diffuse, might need to change this system entirely
+#           into rewrangler
+
 
 class MetallicConnection:
     """
@@ -13,7 +17,7 @@ class MetallicConnection:
     when baking with metallic node connected. 
     """
 
-    def __init__(self, material):
+    def __init__(self, material) -> None:
         """
         Initilaizes MetallicConnection with material 
 
@@ -66,7 +70,7 @@ class MetallicConnection:
 
         return True
     
-    def create_metallic_node(self, metallic_value): 
+    def create_metallic_node(self, metallic_value) -> None: 
         """
         Create a new RGB node for storing metallic value if there exist no node 
         connection to the Principled BSDF.
@@ -84,14 +88,14 @@ class MetallicConnection:
         self.metallic_node = rgb_node
         self.node_tree.links.new(self.metallic_node.outputs[0], self.principled_bsdf.inputs['Metallic'])
 
-    def prepare_bake_metallic(self): 
+    def prepare_bake_metallic(self) -> None: 
         """
         Links metallic node directly to output 
         """
         
         self.node_tree.links.new(self.metallic_node.outputs[0], self.output_node.inputs['Surface'])
 
-    def prepare_bake_others(self):
+    def prepare_bake_others(self) -> None:
         """
         Unlink metallic node and set value to 0
         """
@@ -113,7 +117,7 @@ class MetallicConnection:
 
     ###-------------------------- PRIVATE --------------------------###
 
-    def _find_material_output(self):
+    def _find_material_output(self) -> None:
         """
         Find material output node
         """

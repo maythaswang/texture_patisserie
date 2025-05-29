@@ -8,7 +8,7 @@ class BakeCfg:
     into a more accessible way.
     """
 
-    def __init__(self,settings):
+    def __init__(self,settings) -> None:
         """
         Initialize BakeCfg with settings 
 
@@ -36,7 +36,7 @@ class BakeCfg:
 
     ###-------------------------- PRIVATE --------------------------###
 
-    def _load_texture_settings(self, settings):
+    def _load_texture_settings(self, settings) -> None:
         """
         Load settings for baking
         """
