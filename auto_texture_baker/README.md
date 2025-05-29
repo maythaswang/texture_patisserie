@@ -1,5 +1,6 @@
 # TEXTURE OVEN - Blender Extension
 
+Note: This extension is still being maintained, I will be adding more features whenever I am free or in need of some specific functionalities!
 
 # Currently supports 
 - Principled BSDF

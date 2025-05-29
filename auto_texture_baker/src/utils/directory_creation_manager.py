@@ -8,6 +8,9 @@ import bpy
 def create_save_directory(save_dir):
     """
     Create directory for saving output results if not exist
+
+    Parameters:
+    save_dir(string): Root directory for saving the texture output.
     """
 
     try:

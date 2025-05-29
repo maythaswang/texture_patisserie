@@ -10,12 +10,22 @@ import auto_texture_baker.src.utils as utils
 
 # pylint: disable=C0103
 class MATERIAL_OT_bake_textures(bpy.types.Operator):
+    """
+    Blender Operator for baking texture
+    """
+
     bl_idname = "autobake.bake_texture"
     bl_label = "Auto bake textures"
     bl_description = "Auto bake textures based on boxes checked"
     bl_options = {"REGISTER"}
 
-    def execute(self, context):
+    def execute(self, context) -> None:
+        """
+        Handle baking based on given settings.
+        
+        Parameters: 
+        context (bpy_types.Context): Blender python context
+        """
 
         # Load settings
         settings = context.scene.pg_bake_settings
@@ -50,6 +60,8 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
     def _bakeable_test(self, selected): 
         """
         Test whether the current setup can be used for baking textures.
+
+        selected(list[Any]): Selected meshes for baking
         """
 
         # Verify that at least one object is selected
@@ -64,7 +76,19 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         
         return None
 
-    def _prepare_save_dir(self, save_to_disk, output_path):
+    def _prepare_save_dir(self, save_to_disk, output_path) -> str:
+        """
+        Create save directory if the users wishes to export the baked texture 
+        to an external directory.
+
+        Parameters:
+        save_to_disk(bool)  : Status whether the user wants to export the texture
+        output_path(string) : Output path of the texture 
+
+        Returns:
+        str: Error message if encounter errors, otherwise None 
+        """
+
         if not save_to_disk:
             return None 
         
@@ -75,6 +99,14 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             return "Failed to find or create save directory: " + err_msg
 
     def _pre_bake_routine(self, cfg, selected): 
+        """
+        Run all required tests before baking 
+        
+        Parameters: 
+        cfg(auto_texture_baker.src.data_models.bake_cfg.BakeCfg): Bake configs
+        selected(list[Any])                                     : List of selected mesh to bake
+        """
+        
         err_msg = self._bakeable_test(selected)
         if not err_msg is None: 
             return err_msg

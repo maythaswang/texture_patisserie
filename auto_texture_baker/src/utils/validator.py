@@ -5,6 +5,12 @@ This module provide functions for validating whether an object, mesh, material i
 def is_bakeable_obj(obj) -> tuple[bool, str]: 
     """
     Validate whether the current object can be baked
+
+    Parameter: 
+    obj(bpy.types.Material) : Object that will have their material duplicated for baking purposes.
+
+    Returns: 
+    tuple[bool, str]: Success Status and Error message
     """
     
     # VALIDATE OBJECT IS BEING SELECTED
@@ -24,6 +30,12 @@ def is_bakeable_obj(obj) -> tuple[bool, str]:
 def is_bakeable_mat(material):
     """
     Validate whether the current material can be baked
+
+    Parameter: 
+    material(bpy.types.Material) : Object that will have their material duplicated for baking purposes.
+
+    Returns: 
+    tuple[bool, str]: Success Status and Error message
     """
 
     if not material.use_nodes: 

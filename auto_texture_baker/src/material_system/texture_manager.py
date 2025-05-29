@@ -46,6 +46,13 @@ class TextureManager:
     def create_texture_single(self, name, bake_type, width, height, color_space):
         """
         Generate new texture and define a new name for baking materials
+
+        Parameters: 
+        name(string)        : texture name
+        bake_type(string)   : texture name suffix
+        width(int)          : texture width
+        height(int)         : texture height
+        color_space(string) : color space of the texture such as 'sRGB'
         """
 
         # Define Texture name    
@@ -56,8 +63,8 @@ class TextureManager:
         bake_image.colorspace_settings.name = color_space
 
         # Configure Image texture 
-        # TODO: Fix this, the output does not reflect this value at all.
+        # TODO: Fix this, the output background for some reason will never be transparent...
         bake_image.alpha_mode = 'STRAIGHT'
         bake_image.file_format = 'PNG'
 
-        return bake_image
+        return bake_image   

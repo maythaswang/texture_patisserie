@@ -5,7 +5,9 @@ import bpy
 
 #pylint: disable=C0103
 class PROPERTIES_PT_bake_panel(bpy.types.Panel):
-    """Panel for selecting nodes to bake"""
+    """
+    Panel for selecting nodes to bake
+    """
 
     bl_idname = "MATERIAL_PT_bake_textures"
     bl_label = "Auto Texture Baker"

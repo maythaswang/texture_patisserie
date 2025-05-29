@@ -11,10 +11,16 @@ class PrincipledBSDFBaker:
     as the main shader.
     """
 
-    def __init__(self, context, cfg, selected):
+    def __init__(self, context, cfg, selected) -> None:
         """
-        Initialize PrincipledBSDFBaker
+        Initialize PrincipledBSDFBaker with context, cfg, selected 
+
+        Parameters:
+        context (bpy_types.Context)                                 : Blender python context
+        cfg (auto_texture_baker.src.data_models.bake_cfg.BakeCfg)   : Bake configs
+        selected (list[Any])                                        : Selected meshes
         """
+
         self.cfg = cfg
         self.selected = selected
         self.blender_context = context
@@ -25,6 +31,9 @@ class PrincipledBSDFBaker:
         """
         Bake models in batches into one single texture per bake pass, this can be 
         used to create texture atlas
+
+        Returns: 
+        str: String of error message if the program encounters an error, otherwise None
         """
 
         # WARNING, BANDAID SOLUTIONNNNNNn
@@ -66,7 +75,7 @@ class PrincipledBSDFBaker:
                 self._rewrangle_metallic_nodes(bake_name, duplicate_materials)
    
             # Baking routine
-            err_msg = self._bake_routine(bake_name, obj.name, bake_type, pass_filter, cfg.bake_height, cfg.bake_width, bake_image)
+            err_msg = self._bake_routine(bake_type, pass_filter, cfg.bake_height, cfg.bake_width)
             if not err_msg is None:
                 return err_msg
 
@@ -80,7 +89,10 @@ class PrincipledBSDFBaker:
 
     def separate_bake(self) -> str:
         """
-        Bake textures separately
+        Bake textures separately for each mesh
+        
+        Returns: 
+        str: String of error message if the program encounters an error, otherwise None
         """
 
         cfg = self.cfg
@@ -103,7 +115,7 @@ class PrincipledBSDFBaker:
                 self.material_editor.add_texture_to_nodes(duplicate_materials, bake_image)
                 
                 # Baking routine
-                err_msg = self._bake_routine(bake_name, obj.name, bake_type, pass_filter, cfg.bake_height, cfg.bake_width, bake_image)
+                err_msg = self._bake_routine(bake_type, pass_filter, cfg.bake_height, cfg.bake_width)
                 if not err_msg is None:
                     return err_msg
                 
@@ -115,9 +127,18 @@ class PrincipledBSDFBaker:
 
         return None
 
-    def _bake_routine(self, bake_pass, output_filename , bake_type, pass_filter, bake_height, bake_width, image_texture): 
+    def _bake_routine(self, bake_type, pass_filter, bake_height, bake_width) -> str: 
         """
-        Bake routines
+        Main baking routine with settings based on bake_type, pass_filter, bake_height, bake_width
+
+        Parameters: 
+        bake_type(string)   : Bake type specified from blender's baking option such as 'DIFFUSE' 
+        pass_filter(set)    : Pass filter such as 'COLOR', 'DIRECT', 'NONE'
+        bake_height(float)  : Height of the output texture 
+        bake_width(float)   : Width of the output texture
+
+        Returns: 
+        str: String of error message if the program encounters an error, otherwise None
         """
 
         try:
@@ -134,13 +155,31 @@ class PrincipledBSDFBaker:
         
         return None
 
-    def _save_texture(self, bake_pass, output_filename, image_texture ):
+    def _save_texture(self, bake_name, output_filename, image_texture ):
+        """
+        Save the output texture to the device
+
+        Parameters: 
+        bake_name(string)               : Bake name name such as 'albedo', 'roughness'...
+        output_filename(string)         : Filename that will be the used in the output file
+        image_texture(bpy.types.Image)  : Image textures that will be saved. 
+        """
+
         cfg = self.cfg
-        self.texture_manager.save_texture_to_disk(cfg, bake_pass, output_filename, cfg.file_type, image_texture)
+        self.texture_manager.save_texture_to_disk(cfg, bake_name, output_filename, cfg.file_type, image_texture)
 
 
-    def _rewrangle_metallic_nodes(self, bake_name, duplicate_materials):
+    def _rewrangle_metallic_nodes(self, bake_name, duplicate_materials) -> None:
+        """
+        Rewrangle metallic nodes for baking purposes
+
+        Parameters: 
+        bake_name(string)                               : Bake name name such as 'albedo', 'roughness'...
+        duplicate_materials(list[bpy.types.Material])   : List of duplicated materials that requires rewrangling
+        """
+
         for _, metallic_connection in duplicate_materials:
+            print(type(_))
             if bake_name == "metallic": 
                 metallic_connection.prepare_bake_metallic()
             else:

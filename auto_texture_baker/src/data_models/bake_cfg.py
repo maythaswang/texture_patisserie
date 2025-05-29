@@ -38,7 +38,10 @@ class BakeCfg:
 
     def _load_texture_settings(self, settings) -> None:
         """
-        Load settings for baking
+        Load settings for baking regarding which baking passes to use.
+
+        Parameters:
+        settings (auto_texture_baker.src.bake_settings.PG_bake_settings): Blender custom property group.
         """
 
         texture_passes = {
