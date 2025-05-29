@@ -9,7 +9,7 @@ bl_info = {
 
 # IMPORTS
 import bpy
-from .src.bake_settings import PG_bake_settings
+from .src.property_group.bake_settings import PG_bake_settings
 from .src.ui import PROPERTIES_PT_bake_panel
 from .src.operators import MATERIAL_OT_bake_textures
 
