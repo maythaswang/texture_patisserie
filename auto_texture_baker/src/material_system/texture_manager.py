@@ -28,10 +28,10 @@ class TextureManager:
         cfg(auto_texture_baker.src.data_models.bake_cfg.BakeCfg):   Bake settings 
         bake_type(String)                                       :   Type of baking (albedo, normals, etc...)
         file_type(String)                                       :   Output file type
-        texture(UNKNOWN)                                        :   Image texture
+        texture(bpy.types.Image)                                :   Image texture
         """
 
-        print("tex" + type(texture))
+        print(type(texture))
         # Verify if the texture is exists
         if not texture:
             return
@@ -62,5 +62,3 @@ class TextureManager:
         bake_image.file_format = 'PNG'
 
         return bake_image
-
-    # TODO: Delegate this to a new class for rewrangling material if possible.
