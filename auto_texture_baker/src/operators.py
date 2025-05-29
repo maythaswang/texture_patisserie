@@ -8,7 +8,6 @@ import auto_texture_baker.src.state_manager as state_manager
 import auto_texture_baker.src.material_system as material_system
 
 from .data_models import bake_cfg
-# from .material_system import texture_generator,save_texture,metalness_manager, material_editor
 from .utils import validator
 
 
@@ -24,30 +23,14 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         settings = context.scene.pg_bake_settings
         cfg = bake_cfg.BakeCfg(settings)
 
-        # Verify that at least 1 object is selected
+        # # Verify that at least 1 object is selected
         selected = bpy.context.selected_objects
-        if(not selected or len(selected) == 0):
-            self.report({"ERROR"}, "No object selected")
+
+        # Pre Bake Routine 
+        err_msg = self._pre_bake_routine(cfg, selected)
+        if not err_msg is None: 
+            self.report({'ERROR'}, err_msg)
             return {"CANCELLED"}
-        
-        # Validate All Objects
-        for obj in selected:
-            obj_valid, err_msg = validator.is_bakeable_obj(obj)
-            if not obj_valid:
-                self.report({"ERROR"}, err_msg)
-                return {"CANCELLED"}
-
-        # Save to disk prep
-        status = True
-        err = None
-        if cfg.save_to_disk:
-            status, err = material_system.create_save_directory(cfg.output_path)
-
-        # Cancel if failed to create or find save directory.
-        if not status: 
-            self.report({"ERROR"}, "Failed to find or create save directory")
-            print(err) # DEBUG
-            return {"CANCELLED"} 
 
         # Load Render Configurations 
         render_state_manager = state_manager.RenderStateManager(context,cfg)
@@ -150,13 +133,11 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
 
                     # WARNING: bandage solution for now... I'll fix this later.
                     if cfg.bake_separately:
-                        # bake_image = self._generate_texture(obj.name, cfg, bake_name, color_space)
                         bake_image= material_system.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
                     else: 
                         bake_image = batch_texture.get(bake_name)
 
                     # Add bake_image to material nodes
-                    # self._add_texture_to_nodes(duplicate_materials,bake_image)
                     material_editor.add_texture_to_nodes(duplicate_materials, bake_image)
                     
 
@@ -180,10 +161,40 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         self.report({'INFO'}, "Baking Complete!")
         return {"FINISHED"}
 
-    def _bakeable_test(self): 
+    def _bakeable_test(self, selected): 
         """
         Test whether the current setup can be used for baking textures.
         """
 
-        pass
+        # Verify that at least one object is selected
+        if(not selected or len(selected) == 0):
+            return "No object selected"
+        
+        # Verify that all selected objects are bakable
+        for obj in selected:
+            obj_valid, err_msg = validator.is_bakeable_obj(obj)
+            if not obj_valid:
+                return err_msg
+        
+        return None
 
+    def _prepare_save_dir(self, save_to_disk, output_path):
+        if not save_to_disk:
+            return None 
+        
+        status, err_msg = material_system.create_save_directory(output_path)
+
+        # Cancel if failed to create or find save directory.
+        if not status: 
+            return "Failed to find or create save directory: " + err_msg
+
+    def _pre_bake_routine(self, cfg, selected): 
+        err_msg = self._bakeable_test(selected)
+        if not err_msg is None: 
+            return err_msg
+        
+        err_msg = self._prepare_save_dir(cfg.save_to_disk, cfg.output_path)
+        if not err_msg is None: 
+            return err_msg
+        
+        return None
