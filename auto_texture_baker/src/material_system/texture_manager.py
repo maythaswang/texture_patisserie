@@ -31,7 +31,6 @@ class TextureManager:
         texture(bpy.types.Image)                                :   Image texture
         """
 
-        print(type(texture))
         # Verify if the texture is exists
         if not texture:
             return

@@ -5,10 +5,6 @@ This module handle rewrangling of metallic nodes due to issues with blender meta
 # WARNING:  Currently there is an issue on how the node is rewrangled 
 #           this requires the user to not use the same node as input to 
 #           2 or more fields of the Principled BSDF Shader
-#           Another Issue found also which is normal map leaks into albedo 
-#           When baked with diffuse, might need to change this system entirely
-#           into rewrangler
-
 
 class MetallicConnection:
     """
