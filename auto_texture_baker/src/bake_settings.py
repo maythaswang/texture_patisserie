@@ -5,12 +5,16 @@ Property Group for storing bake settings
 import bpy
 
 class PG_bake_settings(bpy.types.PropertyGroup):
-    """Property Group for bake settings"""
+    """
+    Property Group for bake settings
+    """
 
     albedo: bpy.props.BoolProperty(name="albedo", default = True)
     roughness: bpy.props.BoolProperty(name="roughness", default = True)
     metallic: bpy.props.BoolProperty(name="metallic", default = True)
     normal: bpy.props.BoolProperty(name="normal", default = True)
+
+    bake_separately: bpy.props.BoolProperty(name="bake_separately", default=False)
 
     bake_width: bpy.props.IntProperty(name="bake_width", default=1024, description="Output texture width", min=4)
     bake_height: bpy.props.IntProperty(name="bake_height", default=1024, description="Output texture height", min=4)
@@ -31,10 +35,10 @@ class PG_bake_settings(bpy.types.PropertyGroup):
     )
 
     file_type_items = [
-        ("PNG", "PNG", "Portable Network Graphics (PNG)"),
-        ("JPEG", "JPEG", "Joint Photographic Experts Group (JPEG)"),
-        ("TIFF", "TIFF", "Tagged Image File Format (TIFF)"),
-        ("BMP", "BMP", "Bitmap Image Format (BMP)"),
+        ("PNG", "PNG",  "Output image in PNG format"),
+        ("JPEG", "JPEG", "Output image in JPEG format)"),
+        ("TIFF", "TIFF", "Output image in TIFF format"),
+        ("BMP", "BMP",  "Output image in BMP format"),
     ]
 
     file_type: bpy.props.EnumProperty(

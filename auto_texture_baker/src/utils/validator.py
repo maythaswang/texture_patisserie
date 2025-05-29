@@ -1,8 +1,12 @@
 """
-Validates whether an object, mesh, material is usable
+This module provide functions for validating whether an object, mesh, material is usable
 """
+
 def is_bakeable_obj(obj) -> tuple[bool, str]: 
-    """Validate whether the current object can be baked"""
+    """
+    Validate whether the current object can be baked
+    """
+    
     # VALIDATE OBJECT IS BEING SELECTED
     if not obj or obj.type != "MESH":
         return False, "Invalid object selected"
@@ -18,7 +22,10 @@ def is_bakeable_obj(obj) -> tuple[bool, str]:
     return True, ""
 
 def is_bakeable_mat(material):
-    """Validate whether the current material can be baked"""
+    """
+    Validate whether the current material can be baked
+    """
+
     if not material.use_nodes: 
         return False, "Material doesn't have any nodes."
 

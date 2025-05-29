@@ -2,8 +2,22 @@
 This module contains class for storing all baking configurations
 """
 
-class BakeConfig:
+class BakeCfg:
+    """
+    Loads user's configuration for baking textures from blender's property group 
+    into a more accessible way.
+    """
+
     def __init__(self,settings):
+        """
+        Initialize BakeCfg with settings 
+
+        Parameters:
+        settings (auto_texture_baker.src.bake_settings.PG_bake_settings): Blender custom property group.
+        """
+
+        self.bake_separately = settings.bake_separately
+
         self.bake_width = settings.bake_width
         self.bake_height = settings.bake_height
         self.save_to_disk = settings.save_to_disk
@@ -14,8 +28,19 @@ class BakeConfig:
 
         self.texture_passes = self._load_texture_settings(settings)
 
+    ###--------------------------- PUBLIC ---------------------------###
+
+    #
+    #
+    #
+
+    ###-------------------------- PRIVATE --------------------------###
+
     def _load_texture_settings(self, settings):
-        """Load settings for baking"""
+        """
+        Load settings for baking
+        """
+
         texture_passes = {
             "albedo":    (settings.albedo, "DIFFUSE", {"COLOR"}, "sRGB"),
             "roughness": (settings.roughness, "ROUGHNESS", {"NONE"}, "Non-Color"),

@@ -13,10 +13,23 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
     bl_context = "render"
 
     def draw(self, context):
+        """
+        Draw the UI panel every frame using the provided context
+        context(bpy_types.Context): blender python's context
+        """
+
         ### Setup ### 
         layout = self.layout
         scene = context.scene
         layout.operator("autobake.bake_texture", text="Bake Selected Maps")
+
+        ### Bake settings 
+        layout.label(text="Bake Settings")
+
+        row = layout.row() 
+        row.prop(scene.pg_bake_settings, "bake_separately", text="Bake Separately")
+
+        layout.separator(type="LINE")
 
         ### Output Textures ###
         layout.label(text="Textures to bake")

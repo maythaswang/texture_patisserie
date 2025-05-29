@@ -2,18 +2,43 @@
 This module handle rewrangling of metallic nodes due to issues with blender metallic baking
 """
 
+# WARNING:  Currently there is an issue on how the node is rewrangled 
+#           this requires the user to not use the same node as input to 
+#           2 or more fields of the Principled BSDF Shader
+
 class MetallicConnection:
+    """
+    Stores, manages, rewrangles Metallic Node connections of the provied 
+    material for baking since the current version of blender have issues 
+    when baking with metallic node connected. 
+    """
+
     def __init__(self, material):
+        """
+        Initilaizes MetallicConnection with material 
+
+        Parameters: 
+        material (bpy.types.Material): Blender Material that will be rewrangled.
+        """
+
         self.material = material            # Material
         self.node_tree = None               # Node tree of this material
         self.metallic_node = None           # Node connected to the principled BSDF
         self.principled_bsdf = None         # Principled BSDF Node
         self.output_node = None             # Output node of the node tree
 
-    def prepare_metallic_values(self): 
-        """ Find all required nodes for rewrangling during pre-post baking stages
-            Creates a new node for metallic value if not exist
+    ###--------------------------- PUBLIC ---------------------------###
+
+    def prepare_metallic_values(self) -> bool: 
+        """ 
+        Find all required nodes for rewrangling during pre-post baking stages.
+        Creates a new node for metallic value if not exist.
+
+        Returns: 
+        bool: Material's validity for rewrangling and baking.
         """
+
+        # Get the node tree
         self.node_tree = self.material.node_tree 
         metallic_value = 0
 
@@ -23,7 +48,8 @@ class MetallicConnection:
                 self.principled_bsdf = node
                 metallic_value = self.principled_bsdf.inputs['Metallic'].default_value
                 break
-            
+        
+        # Validate whether Principled BSDF exists
         if not self.principled_bsdf:
             print("No Principled BSDF node found in the material")
             return False
@@ -40,15 +66,16 @@ class MetallicConnection:
 
         return True
     
-    def _find_material_output(self):
-        """Find material output node"""
-        for node in self.node_tree.nodes:
-            if node.type == 'OUTPUT_MATERIAL':
-                self.output_node = node
-                break
-
     def create_metallic_node(self, metallic_value): 
-        """Create a new RGB node for storing metallic value if there exist no node connection to the Principled BSDF"""
+        """
+        Create a new RGB node for storing metallic value if there exist no node 
+        connection to the Principled BSDF.
+
+        Parameters: 
+        metallic_value(float): Metallic value of the Principled BSDF
+        """
+
+        # Create new RGB node
         node_tree= self.node_tree
         rgb_node = node_tree.nodes.new('ShaderNodeRGB')
         rgb_node.outputs[0].default_value = (metallic_value, metallic_value, metallic_value, 1)  # (R, G, B, A)
@@ -58,11 +85,16 @@ class MetallicConnection:
         self.node_tree.links.new(self.metallic_node.outputs[0], self.principled_bsdf.inputs['Metallic'])
 
     def prepare_bake_metallic(self): 
-        """Links metallic node directly to output """
+        """
+        Links metallic node directly to output 
+        """
+        
         self.node_tree.links.new(self.metallic_node.outputs[0], self.output_node.inputs['Surface'])
 
     def prepare_bake_others(self):
-        """Unlink metallic node and set value to 0"""
+        """
+        Unlink metallic node and set value to 0
+        """
         
         # Restore BSDF Connection
         self.node_tree.links.new(self.principled_bsdf.outputs[0], self.output_node.inputs['Surface'])
@@ -78,3 +110,15 @@ class MetallicConnection:
         if metallic_link:
             self.node_tree.links.remove(metallic_link)
         self.principled_bsdf.inputs['Metallic'].default_value = 0
+
+    ###-------------------------- PRIVATE --------------------------###
+
+    def _find_material_output(self):
+        """
+        Find material output node
+        """
+
+        for node in self.node_tree.nodes:
+            if node.type == 'OUTPUT_MATERIAL':
+                self.output_node = node
+                break
