@@ -24,13 +24,16 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         ### Setup ### 
         layout = self.layout
         scene = context.scene
+        pg = scene.pg_bake_settings
+        
+
         layout.operator("autobake.bake_texture", text="Bake Selected Maps")
 
         ### Bake settings 
         layout.label(text="Bake Settings")
 
         row = layout.row() 
-        row.prop(scene.pg_bake_settings, "bake_separately", text="Bake Separately")
+        row.prop(pg, "bake_separately", text="Bake Separately")
 
         layout.separator(type="LINE")
 
@@ -38,10 +41,10 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         layout.label(text="Textures to bake")
 
         row = layout.row()
-        row.prop(scene.pg_bake_settings , "albedo")
-        row.prop(scene.pg_bake_settings , "roughness")
-        row.prop(scene.pg_bake_settings , "metallic")
-        row.prop(scene.pg_bake_settings , "normal")
+        row.prop(pg , "albedo")
+        row.prop(pg , "roughness")
+        row.prop(pg , "metallic")
+        row.prop(pg , "normal")
 
         layout.separator(type="LINE")
 
@@ -49,22 +52,42 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         layout.label(text="Output Settings")
 
         # Render Device
-        layout.prop(scene.pg_bake_settings, "render_device", text="Render device")
+        layout.prop(pg, "render_device", text="Render device")
 
         # Render Samples
         row = layout.row()
         row.label(text="Render Samples")
-        row.prop(scene.pg_bake_settings, "render_samples", text="")
+        row.prop(pg, "render_samples", text="")
 
         # Texture resolution
         row = layout.row()
         row.label(text="Texture Resolution")
-        row.prop(scene.pg_bake_settings, "bake_width", text="width")
-        row.prop(scene.pg_bake_settings, "bake_height", text="height")
+        row.prop(pg, "bake_width", text="width")
+        row.prop(pg, "bake_height", text="height")
         
         # Save Settings
         row = layout.row()
-        row.prop(scene.pg_bake_settings, "file_type", text="File Type")
+        row.prop(pg, "file_type", text="File Type")
         row = layout.row()
-        row.prop(scene.pg_bake_settings, "save_to_disk" , text="Save to disk")
-        row.prop(scene.pg_bake_settings, "output_path", text="")
+        row.prop(pg, "save_to_disk" , text="Save to disk")
+        row.prop(pg, "output_path", text="")
+
+        layout.separator(type="LINE")
+
+        # Naming conventions
+        layout.label(text="Naming Convention")
+        layout.prop(pg, "naming_convention", text="Format")
+        layout.prop(pg, "output_name_text1", text="Text1")
+        layout.prop(pg, "output_name_text2", text="Text2")
+        layout.prop(pg, "output_name_separator", text="Separator")
+
+        layout.prop(pg, "batch_name_override", text="Override batch name")
+        if pg.batch_name_override:
+            layout.prop(pg, "batch_name", text="Batch name")
+
+        layout.prop(pg, "texture_type_name_override", text="Texture type name override")
+        if pg.texture_type_name_override:
+            layout.prop(pg, "output_albedo_name", text="Albedo")
+            layout.prop(pg, "output_roughness_name", text="Roughness")
+            layout.prop(pg, "output_metallic_name", text="Metallic")
+            layout.prop(pg, "output_normal_name", text="Normal")

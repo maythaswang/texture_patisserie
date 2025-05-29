@@ -49,7 +49,7 @@ class PrincipledBSDFBaker:
             if not bake_type_enabled:
                 continue 
             
-            bake_image= self.texture_manager.create_texture_single(BATCH_BAKE_NAME, bake_name, cfg.bake_width, cfg.bake_height, color_space)
+            bake_image= self.texture_manager.create_texture_single(cfg,BATCH_BAKE_NAME, bake_name, cfg.bake_width, cfg.bake_height, color_space)
             batch_textures.update({bake_name: bake_image})
 
         # Pre-Duplicate materials so we don't need to dupe k times. (where k is the number of bake types)
@@ -82,7 +82,9 @@ class PrincipledBSDFBaker:
             if cfg.save_to_disk:
                 self._save_texture(bake_name, obj.name, bake_image)
 
-        ## TODO: USING A STACK DOESN"T WORK FOR THIS SO LET's DO IT THE OTHER WAY (right now did the most stupid hacky way just to get by)
+        ## TODO: Fix this lol...
+        # USING A STACK DOESN"T WORK FOR THIS SO LET's DO IT THE OTHER WAY (right now did the most stupid hacky way just to get by)
+        
         # Restoring material
         for obj in self.selected[::-1]:
             self.material_editor.restore_material(obj) # JUST REVERSE THE THING FOR NOW LOL
@@ -109,7 +111,7 @@ class PrincipledBSDFBaker:
 
                 # Edit Metallic links
                 self._rewrangle_metallic_nodes(bake_name,duplicate_materials)
-                bake_image = self.texture_manager.create_texture_single(obj.name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
+                bake_image = self.texture_manager.create_texture_single(cfg, obj.name, bake_name, cfg.bake_width, cfg.bake_height, color_space)
 
                 # Add bake_image to material nodes (each obj have same bake_image for all materials)
                 self.material_editor.add_texture_to_nodes(duplicate_materials, bake_image)
@@ -179,7 +181,6 @@ class PrincipledBSDFBaker:
         """
 
         for _, metallic_connection in duplicate_materials:
-            print(type(_))
             if bake_name == "metallic": 
                 metallic_connection.prepare_bake_metallic()
             else:

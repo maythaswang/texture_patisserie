@@ -45,7 +45,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         # We will probably be handling more shaders in the future but this one will be the 
         # defualt for now
         principled_bsdf_baker = baking_system.PrincipledBSDFBaker(context,cfg,selected)
-        if (cfg.bake_separately):
+        if cfg.bake_separately:
             principled_bsdf_baker.separate_bake()
         else:
             principled_bsdf_baker.batch_bake()

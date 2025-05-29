@@ -4,6 +4,7 @@ This module handle texture related operations such as creating, saving textures
 
 import os 
 import bpy
+import auto_texture_baker.src.utils as utils
 
 FILE_TYPE_EXT = {
     "BMP": ".bmp",
@@ -35,15 +36,16 @@ class TextureManager:
         if not texture:
             return
 
+        texture_name = utils.build_texture_name(cfg, bake_type, obj_name)
         # Create file path 
-        file_path = os.path.join(cfg.output_path, f"{obj_name}_{bake_type}{FILE_TYPE_EXT[file_type]}")
+        file_path = os.path.join(cfg.output_path, f"{texture_name}{FILE_TYPE_EXT[file_type]}")
         print(FILE_TYPE_EXT[file_type])
         texture.filepath_raw = file_path
         texture.save()
 
 
 
-    def create_texture_single(self, name, bake_type, width, height, color_space):
+    def create_texture_single(self, cfg, name, bake_type, width, height, color_space):
         """
         Generate new texture and define a new name for baking materials
 
@@ -56,7 +58,8 @@ class TextureManager:
         """
 
         # Define Texture name    
-        texture_name = f"tmp_{name}_{bake_type}"
+        # texture_name = f"tmp_{name}_{bake_type}"
+        texture_name = utils.build_texture_name(cfg, bake_type, name)
 
         # Create Texture
         bake_image = bpy.data.images.new(texture_name, width=width, height=height)

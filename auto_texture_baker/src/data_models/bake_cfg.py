@@ -28,6 +28,24 @@ class BakeCfg:
 
         self.texture_passes = self._load_texture_settings(settings)
 
+        # Naming Convention
+        self.naming_convention = settings.naming_convention
+
+        self.output_name_text1 = settings.output_name_text1
+        self.output_name_text2 = settings.output_name_text2 
+        self.output_name_separator = settings.output_name_separator
+
+        # Override batch name
+        self.batch_name_override = settings.batch_name_override
+        self.batch_name = settings.batch_name
+
+        # Override texture names 
+        self.texture_type_name_override = settings.texture_type_name_override
+        self.output_albedo_name = settings.output_albedo_name
+        self.output_roughness_name = settings.output_roughness_name
+        self.output_metallic_name = settings.output_metallic_name
+        self.output_normal_name = settings.output_normal_name
+    
     ###--------------------------- PUBLIC ---------------------------###
 
     #

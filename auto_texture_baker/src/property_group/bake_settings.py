@@ -48,3 +48,31 @@ class PG_bake_settings(bpy.types.PropertyGroup):
         items=file_type_items, 
         default="PNG"
     )
+
+    # Naming conventions
+    naming_convention_items = [
+        ('name_type_text1_text2', 'Name, Type, Text1, Text2', 'Choose the preferred naming convention'),
+        ('text1_name_type_text2', 'Text1, Name, Type, Text2', 'Choose the preferred naming convention'),
+        ('text1_text2_name_type', 'Text1, Text2, Name, Type', 'Choose the preferred naming convention'),
+        ('text1_type_name_text2', 'Text1, Type, Name, Text2', 'Choose the preferred naming convention'),
+    ]
+
+    naming_convention: bpy.props.EnumProperty(
+        name="Naming Convention",
+        description="Choose the preferred naming convention for the output texture",
+        items=naming_convention_items, 
+        default="name_type_text1_text2"
+    )
+
+    output_name_text1: bpy.props.StringProperty(name="output_name_text1", default="")
+    output_name_text2: bpy.props.StringProperty(name="output_name_text2", default="")
+    output_name_separator: bpy.props.StringProperty(name="output_name_separator", default="_")
+    batch_name_override: bpy.props.BoolProperty(name="batch_name_override", default = False)
+    batch_name: bpy.props.StringProperty(name="batch_name", default="batch")
+
+    # Override texture names 
+    texture_type_name_override: bpy.props.BoolProperty(name="texture_type_name_override", default=False)
+    output_albedo_name:     bpy.props.StringProperty(name="output_albedo_name", default = "albedo")
+    output_roughness_name:  bpy.props.StringProperty(name="output_roughness_name", default= "roughness")
+    output_metallic_name:   bpy.props.StringProperty(name="output_metallic_name", default = "metallic")
+    output_normal_name:     bpy.props.StringProperty(name="output_normal_name", default = "normal")
