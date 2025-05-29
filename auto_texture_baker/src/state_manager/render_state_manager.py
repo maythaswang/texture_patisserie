@@ -1,7 +1,6 @@
 """
 This module manages loading, storing, and restoring render settings inbetween bakes
 """
-import bpy
 
 class RenderStateManager:
     """Handles managing setting render state according to user input"""

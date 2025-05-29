@@ -6,6 +6,7 @@ import bpy
 from .data_models import bake_cfg
 from .material_system import texture_generator,save_texture,metalness_manager, material_editor
 from .utils import validator
+import auto_texture_baker.src.state_manager as state_manager
 
 from collections import deque
 
@@ -50,8 +51,8 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             return {"CANCELLED"} 
 
         # Load Render Configurations 
-        render_state = self._store_render_state(context)
-        self._set_render_state(context,cfg)
+        render_state_manager = state_manager.RenderStateManager(context,cfg)
+        render_state_manager.set_bake_render_state()
         
         # WARNING, BANDAID SOLUTIONNNNNNn
         BATCH_BAKE_NAME = "batch_bake"
@@ -169,7 +170,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
                 self._restore_material(obj)
 
         # Restore Render state 
-        self._restore_render_state(context,render_state)
+        render_state_manager.restore_initial_render_state()
 
         # Baking success
         self.report({'INFO'}, "Baking Complete!")
@@ -224,28 +225,3 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
             original_id, original_mat, dupe_mat = self.material_stack.pop()
             material_editor.link_material(obj, original_id, original_mat)
             bpy.data.materials.remove(dupe_mat)
-
-    def _set_render_state(self, context, cfg):
-        """Set render state for baking"""
-        context.scene.render.engine = "CYCLES"
-        context.scene.cycles.samples = cfg.render_samples
-        context.scene.cycles.device = cfg.render_device
-        context.scene.render.image_settings.file_format = cfg.file_type
-     
-    def _store_render_state(self, context):
-        """Store previous render state"""
-        render_state = {
-            "engine": context.scene.render.engine,
-            "samples": context.scene.cycles.samples,
-            "device": context.scene.cycles.device,
-            "file_type": context.scene.render.image_settings.file_format
-        }
-        return render_state
-    
-    def _restore_render_state(self,context,render_state): 
-        """Restore render state to default"""
-        context.scene.render.engine = render_state["engine"]
-        context.scene.cycles.samples = render_state["samples"]
-        context.scene.cycles.device = render_state["device"]
-        context.scene.render.image_settings.file_format = render_state["file_type"] 
-
