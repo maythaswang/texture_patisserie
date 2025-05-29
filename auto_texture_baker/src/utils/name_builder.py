@@ -1,6 +1,7 @@
 """
 Build texture and directory names based on user input
 """
+import auto_texture_baker.src.bake_enums as bake_enums
 
 def build_texture_name(cfg, bake_pass, main_name): 
     """
@@ -18,7 +19,7 @@ def build_texture_name(cfg, bake_pass, main_name):
     bake_type = bake_pass
 
 
-    if not cfg.bake_separately:
+    if cfg.bake_grouping_options == bake_enums.BakeGroupingOptions.BAKE_BATCH:
         if cfg.batch_name_override:
             name = cfg.batch_name
         else:

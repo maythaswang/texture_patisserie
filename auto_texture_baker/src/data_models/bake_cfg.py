@@ -2,6 +2,8 @@
 This module contains class for storing all baking configurations
 """
 
+import auto_texture_baker.src.bake_enums as bake_enums
+
 class BakeCfg:
     """
     Loads user's configuration for baking textures from blender's property group 
@@ -16,7 +18,8 @@ class BakeCfg:
         settings (auto_texture_baker.src.bake_settings.PG_bake_settings): Blender custom property group.
         """
 
-        self.bake_separately = settings.bake_separately
+        # self.bake_separately = settings.bake_separately
+        self.bake_grouping_options = bake_enums.get_grouping_options_from_string(settings.bake_grouping_options)
 
         self.bake_width = settings.bake_width
         self.bake_height = settings.bake_height

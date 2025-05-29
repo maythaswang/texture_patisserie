@@ -12,12 +12,12 @@ Note: This extension is still being maintained, I will be adding more features w
 - Multiple Object Separately
 - Multiple Object in one UV
 - Texture Export
+- Preset and Modifiable Naming conventions
 
 # Will implement
 - Multires
 - MultiUV 
 - Channel Packing 
-- Formatting (prefix, suffix, name overriding)
 - Directory Creation
 - Bake Queue
 

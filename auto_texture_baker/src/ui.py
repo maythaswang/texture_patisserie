@@ -32,8 +32,9 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         ### Bake settings 
         layout.label(text="Bake Settings")
 
-        row = layout.row() 
-        row.prop(pg, "bake_separately", text="Bake Separately")
+        row = layout.row()
+        layout.label(text="Bake Grouping Options")
+        layout.prop(pg, "bake_grouping_options", text="")
 
         layout.separator(type="LINE")
 
@@ -52,7 +53,7 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         layout.label(text="Output Settings")
 
         # Render Device
-        layout.prop(pg, "render_device", text="Render device")
+        layout.prop(pg, "render_device", text="Device")
 
         # Render Samples
         row = layout.row()
@@ -61,7 +62,7 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
 
         # Texture resolution
         row = layout.row()
-        row.label(text="Texture Resolution")
+        row.label(text="Resolution")
         row.prop(pg, "bake_width", text="width")
         row.prop(pg, "bake_height", text="height")
         

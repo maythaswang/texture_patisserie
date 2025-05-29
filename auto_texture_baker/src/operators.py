@@ -5,8 +5,8 @@ import bpy
 import auto_texture_baker.src.baking_system as baking_system
 import auto_texture_baker.src.state_manager as state_manager
 import auto_texture_baker.src.data_models as data_models
+import auto_texture_baker.src.bake_enums as bake_enums
 import auto_texture_baker.src.utils as utils
-
 
 # pylint: disable=C0103
 class MATERIAL_OT_bake_textures(bpy.types.Operator):
@@ -45,10 +45,10 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         # We will probably be handling more shaders in the future but this one will be the 
         # defualt for now
         principled_bsdf_baker = baking_system.PrincipledBSDFBaker(context,cfg,selected)
-        if cfg.bake_separately:
-            principled_bsdf_baker.separate_bake()
-        else:
+        if cfg.bake_grouping_options == bake_enums.BakeGroupingOptions.BAKE_BATCH:
             principled_bsdf_baker.batch_bake()
+        else:
+            principled_bsdf_baker.separate_bake()
 
         # Restore Render state 
         render_state_manager.restore_initial_render_state()

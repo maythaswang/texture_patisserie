@@ -15,7 +15,19 @@ class PG_bake_settings(bpy.types.PropertyGroup):
     metallic: bpy.props.BoolProperty(name="metallic", default = True)
     normal: bpy.props.BoolProperty(name="normal", default = True)
 
-    bake_separately: bpy.props.BoolProperty(name="bake_separately", default=False)
+    # Batching options
+
+    bake_grouping_options_items= [
+        ("bake_batch", "Bake Batch", "Bake multiple objects into the same texture"),
+        ("bake_separate_obj", "Bake Separate Object", "Bake each objects separately into different textures"),
+    ]
+    
+    bake_grouping_options: bpy.props.EnumProperty(
+        name="Bake Grouping Options",
+        description="Choose the options based on how you prefer the output textures are grouped",
+        items = bake_grouping_options_items,
+        default="bake_batch"
+    )
 
     bake_width: bpy.props.IntProperty(name="bake_width", default=1024, description="Output texture width", min=4)
     bake_height: bpy.props.IntProperty(name="bake_height", default=1024, description="Output texture height", min=4)
