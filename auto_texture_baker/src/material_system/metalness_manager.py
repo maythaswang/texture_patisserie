@@ -5,6 +5,9 @@ This module handle rewrangling of metallic nodes due to issues with blender meta
 # WARNING:  Currently there is an issue on how the node is rewrangled 
 #           this requires the user to not use the same node as input to 
 #           2 or more fields of the Principled BSDF Shader
+#           ALSO, Currently it uses the first output of the node that
+#           goes into the metallic value slot, thus meaning that you need to 
+#           only use the first node for now (until I fix this)
 
 class MetallicConnection:
     """

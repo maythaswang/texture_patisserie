@@ -50,3 +50,37 @@ def build_texture_name(cfg, bake_pass, main_name):
     texture_name = separator.join(word_position)
 
     return texture_name
+
+def build_dir_name(cfg, main_name):
+    """
+    Build directory name based on the configuration provided
+    """
+
+    dir_name = ""
+    word_position = ["","",""]
+
+    name = main_name
+    text1 = cfg.output_name_text1
+    text2 = cfg.output_name_text2
+    separator = cfg.output_name_separator
+
+    if cfg.bake_grouping_options == bake_enums.BakeGroupingOptions.BAKE_BATCH:
+        if cfg.batch_name_override:
+            name = cfg.batch_name
+        else:
+            name = "batch"
+
+    match cfg.naming_convention: 
+        case "name_type_text1_text2":
+            word_position = [name, text1, text2]
+        case "text1_name_type_text2":
+            word_position = [text1, name, text2]
+        case "text1_text2_name_type":
+            word_position = [text1, text2, name]
+        case "text1_type_name_text2":
+            word_position = [text1, name, text2]
+
+    word_position = [word for word in word_position if word != ""]
+    dir_name = separator.join(word_position)
+
+    return dir_name

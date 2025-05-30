@@ -13,15 +13,15 @@ Note: This extension is still being maintained, I will be adding more features w
 - Multiple Object in one UV
 - Texture Export
 - Preset and Modifiable Naming conventions
+- Subdirectory Creation
 
-# Will implement
+# Future plans
 - Multires
 - MultiUV 
+- Normals swizzle
 - Channel Packing 
-- Directory Creation
-- Bake Queue
+- Bake Queue and presets
 
 # Issues 
 - Export format issue
-- Currently there is an issue where the bake result will never set itself to clear bg
 - The nodes going into different output cannot be the same otherwise there will be issues when rewrangling internally

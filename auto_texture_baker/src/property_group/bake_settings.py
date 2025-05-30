@@ -61,6 +61,8 @@ class PG_bake_settings(bpy.types.PropertyGroup):
         default="PNG"
     )
 
+    use_alpha: bpy.props.BoolProperty(name= "use_alpha", default=False )
+
     # Naming conventions
     naming_convention_items = [
         ('name_type_text1_text2', 'Name, Type, Text1, Text2', 'Choose the preferred naming convention'),
@@ -93,3 +95,6 @@ class PG_bake_settings(bpy.types.PropertyGroup):
     overwrite_previous_save: bpy.props.BoolProperty(name="overwrite_previous_save", default= False)
     file_versioning_suffix: bpy.props.StringProperty(name="file_versioning_suffix", default="")
     
+    # Create subdirectory
+    create_subdirectory: bpy.props.BoolProperty(name="create_subdirectory", default = False)
+    # separate_subdirectory_version: bpy.props.BoolProperty(name="separate_subdirectory_version", default=False)

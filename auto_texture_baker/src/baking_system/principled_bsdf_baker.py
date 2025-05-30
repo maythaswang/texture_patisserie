@@ -26,6 +26,7 @@ class PrincipledBSDFBaker:
         self.blender_context = context
         self.material_editor = material_system.MaterialEditor(context)
         self.texture_manager = material_system.TextureManager(cfg.output_path)
+        self.output_path = cfg.output_path
 
     def batch_bake(self) -> str:
         """
@@ -81,7 +82,6 @@ class PrincipledBSDFBaker:
 
         ## TODO: Fix this lol...
         # USING A STACK DOESN"T WORK FOR THIS SO LET's DO IT THE OTHER WAY (right now did the most stupid hacky way just to get by)
-        
         # Restoring material
         for obj in self.selected[::-1]:
             self.material_editor.restore_material(obj) # JUST REVERSE THE THING FOR NOW LOL

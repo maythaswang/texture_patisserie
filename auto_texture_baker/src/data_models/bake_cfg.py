@@ -52,6 +52,11 @@ class BakeCfg:
         # Versioning 
         self.overwrite_previous_save = settings.overwrite_previous_save
         self.file_versioning_suffix = settings.file_versioning_suffix
+        self.create_subdirectory = settings.create_subdirectory
+        # self.separate_subdirectory_version = settings.separate_subdirectory_version
+
+        # Image config
+        self.use_alpha = settings.use_alpha
     
     ###--------------------------- PUBLIC ---------------------------###
 

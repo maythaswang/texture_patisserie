@@ -47,6 +47,11 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         row.prop(pg , "metallic")
         row.prop(pg , "normal")
 
+        #Texture Settings
+        layout.separator(type="LINE")
+        layout.label(text="Texture Settings")        
+        layout.prop(pg, "use_alpha", text="Use Alpha")
+
         layout.separator(type="LINE")
 
         ### Output Settings ###
@@ -101,3 +106,7 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         if not pg.overwrite_previous_save:
             layout.label(text= "File versioning suffix [eg: duplicate_V0,1,2..n ]:")
             layout.prop(pg, "file_versioning_suffix", text="")
+
+        layout.label(text="Subdirectories") 
+        layout.prop(pg, "create_subdirectory", text="Create Subdirectory")
+        # layout.prop(pg, "separate_subdirectory_version", text="Separate subdirectory version")
