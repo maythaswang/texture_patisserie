@@ -31,6 +31,7 @@ class RenderStateManager:
         self.bpy_context.scene.cycles.samples                       = self.render_cfg.render_samples
         self.bpy_context.scene.cycles.device                        = self.render_cfg.render_device
         self.bpy_context.scene.render.image_settings.file_format    = self.render_cfg.file_type
+        self.bpy_context.scene.render.bake.margin                   = self.render_cfg.texture_margin
      
     def restore_initial_render_state(self) -> None: 
         """
@@ -41,6 +42,7 @@ class RenderStateManager:
         self.bpy_context.scene.cycles.samples                       = self.render_state["samples"]
         self.bpy_context.scene.cycles.device                        = self.render_state["device"]
         self.bpy_context.scene.render.image_settings.file_format    = self.render_state["file_type"] 
+        self.bpy_context.scene.render.bake.margin                   = self.render_state["texture_margin"]
 
     ###-------------------------- PRIVATE --------------------------###
 
@@ -50,10 +52,11 @@ class RenderStateManager:
         """
 
         render_state = {
-            "engine":       self.bpy_context.scene.render.engine,
-            "samples":      self.bpy_context.scene.cycles.samples,
-            "device":       self.bpy_context.scene.cycles.device,
-            "file_type":    self.bpy_context.scene.render.image_settings.file_format
+            "engine":           self.bpy_context.scene.render.engine,
+            "samples":          self.bpy_context.scene.cycles.samples,
+            "device":           self.bpy_context.scene.cycles.device,
+            "file_type":        self.bpy_context.scene.render.image_settings.file_format,
+            "texture_margin":   self.bpy_context.scene.render.bake.margin
         }
 
         return render_state

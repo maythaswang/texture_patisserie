@@ -51,6 +51,7 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
         layout.separator(type="LINE")
         layout.label(text="Texture Settings")        
         layout.prop(pg, "use_alpha", text="Use Alpha")
+        layout.prop(pg, "texture_margin", text="Texture Margin")
 
         layout.separator(type="LINE")
 

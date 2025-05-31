@@ -62,6 +62,7 @@ class PG_bake_settings(bpy.types.PropertyGroup):
     )
 
     use_alpha: bpy.props.BoolProperty(name= "use_alpha", default=False )
+    texture_margin: bpy.props.IntProperty(name= "texture_margin", default=16, description="margin between islands.", min = 0)
 
     # Naming conventions
     naming_convention_items = [

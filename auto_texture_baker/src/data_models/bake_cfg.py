@@ -57,6 +57,7 @@ class BakeCfg:
 
         # Image config
         self.use_alpha = settings.use_alpha
+        self.texture_margin = settings.texture_margin
     
     ###--------------------------- PUBLIC ---------------------------###
 
