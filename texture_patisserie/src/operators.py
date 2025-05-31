@@ -2,11 +2,11 @@
 This module contains operators and utility functions for baking materials
 """
 import bpy
-import auto_texture_baker.src.baking_system as baking_system
-import auto_texture_baker.src.state_manager as state_manager
-import auto_texture_baker.src.data_models as data_models
-import auto_texture_baker.src.bake_enums as bake_enums
-import auto_texture_baker.src.utils as utils
+import texture_patisserie.src.baking_system as baking_system
+import texture_patisserie.src.state_manager as state_manager
+import texture_patisserie.src.data_models as data_models
+import texture_patisserie.src.bake_enums as bake_enums
+import texture_patisserie.src.utils as utils
 
 # pylint: disable=C0103
 class MATERIAL_OT_bake_textures(bpy.types.Operator):
@@ -103,7 +103,7 @@ class MATERIAL_OT_bake_textures(bpy.types.Operator):
         Run all required tests before baking 
         
         Parameters: 
-        cfg(auto_texture_baker.src.data_models.bake_cfg.BakeCfg): Bake configs
+        cfg(texture_patisserie.src.data_models.bake_cfg.BakeCfg): Bake configs
         selected(list[Any])                                     : List of selected mesh to bake
         """
         

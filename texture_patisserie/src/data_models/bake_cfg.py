@@ -2,7 +2,7 @@
 This module contains class for storing all baking configurations
 """
 
-import auto_texture_baker.src.bake_enums as bake_enums
+import texture_patisserie.src.bake_enums as bake_enums
 
 class BakeCfg:
     """
@@ -15,7 +15,7 @@ class BakeCfg:
         Initialize BakeCfg with settings 
 
         Parameters:
-        settings (auto_texture_baker.src.bake_settings.PG_bake_settings): Blender custom property group.
+        settings (texture_patisserie.src.bake_settings.PG_bake_settings): Blender custom property group.
         """
 
         # self.bake_separately = settings.bake_separately
@@ -72,7 +72,7 @@ class BakeCfg:
         Load settings for baking regarding which baking passes to use.
 
         Parameters:
-        settings (auto_texture_baker.src.bake_settings.PG_bake_settings): Blender custom property group.
+        settings (texture_patisserie.src.bake_settings.PG_bake_settings): Blender custom property group.
         """
 
         texture_passes = {

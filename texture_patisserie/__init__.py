@@ -1,11 +1,11 @@
 """
-AUTO TEXTURE BAKER - BLENDER ADDON
+TEXTURE PATISSERIE - BLENDER ADDON
 """    
 
 bl_info = {
-    "name": "Auto Texture Baker",
+    "name": "Texture Patisserie",
     "author": "maythas_w maythas.wangcharoenwong@gmail.com",
-    "version": (0,0,1),
+    "version": (0,0,2),
     "blender": (2,8,0),
     "description" : "Automatically bakes selected object's material into texture",
     "category" : "Material",

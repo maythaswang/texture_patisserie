@@ -10,7 +10,7 @@ class PROPERTIES_PT_bake_panel(bpy.types.Panel):
     """
 
     bl_idname = "MATERIAL_PT_bake_textures"
-    bl_label = "Auto Texture Baker"
+    bl_label = "Texture Patisserie"
     bl_space_type = "PROPERTIES"
     bl_region_type = "WINDOW"
     bl_context = "render"

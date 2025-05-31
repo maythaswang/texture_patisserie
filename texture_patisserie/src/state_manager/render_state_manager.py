@@ -13,7 +13,7 @@ class RenderStateManager:
 
         Parameters: 
         bpy_context(bpy_types.Context)                                  : Blender python context
-        render_cfg(auto_texture_baker.src.data_models.bake_cfg.BakeCfg) : Bake and Render Configs
+        render_cfg(texture_patisserie.src.data_models.bake_cfg.BakeCfg) : Bake and Render Configs
         """
 
         self.bpy_context = bpy_context

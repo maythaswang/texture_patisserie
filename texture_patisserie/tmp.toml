@@ -1,0 +1,19 @@
+schema_version = "1.0.0"
+id = "texture_patisserie"
+version = "0.0.2"
+name = "Texture Patisserie"
+tagline = "Baking materials to PBR textures and export in a few clicks"
+maintainer = "maythas_w <maythas.wangcharoenwong@gmail.com>"
+type = "add-on"
+category = "Material"
+
+# # Optional: link to documentation, support, source files, etc
+# website = "https://extensions.blender.org/add-ons/my-example-package/"
+
+blender_version_min = "2.8.0"
+
+# License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
+# https://docs.blender.org/manual/en/dev/advanced/extensions/licenses.html
+license = [
+  "SPDX:GPL-3.0-or-later",
+]

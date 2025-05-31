@@ -4,7 +4,7 @@ This module handle texture related operations such as creating, saving textures
 
 import os 
 import bpy
-import auto_texture_baker.src.utils as utils
+import texture_patisserie.src.utils as utils
 
 FILE_TYPE_EXT = {
     "BMP": ".bmp",
@@ -26,7 +26,7 @@ class TextureManager:
         Save texture to the specified path provided cfg, bake_type, obj_name, file_type, texture
 
         Parameters: 
-        cfg(auto_texture_baker.src.data_models.bake_cfg.BakeCfg):   Bake settings 
+        cfg(texture_patisserie.src.data_models.bake_cfg.BakeCfg):   Bake settings 
         bake_type(String)                                       :   Type of baking (albedo, normals, etc...)
         file_type(String)                                       :   Output file type
         texture(bpy.types.Image)                                :   Image texture

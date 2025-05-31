@@ -3,7 +3,7 @@ This module serves as the core logic for baking texture that uses single
 Principled BSDF. 
 """
 import bpy
-import auto_texture_baker.src.material_system as material_system
+import texture_patisserie.src.material_system as material_system
 
 class PrincipledBSDFBaker:
     """
@@ -17,7 +17,7 @@ class PrincipledBSDFBaker:
 
         Parameters:
         context (bpy_types.Context)                                 : Blender python context
-        cfg (auto_texture_baker.src.data_models.bake_cfg.BakeCfg)   : Bake configs
+        cfg (texture_patisserie.src.data_models.bake_cfg.BakeCfg)   : Bake configs
         selected (list[Any])                                        : Selected meshes
         """
 

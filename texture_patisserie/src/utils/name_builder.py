@@ -1,7 +1,7 @@
 """
 Build texture and directory names based on user input
 """
-import auto_texture_baker.src.bake_enums as bake_enums
+import texture_patisserie.src.bake_enums as bake_enums
 
 def build_texture_name(cfg, bake_pass, main_name): 
     """

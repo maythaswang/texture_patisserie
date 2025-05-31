@@ -5,8 +5,8 @@ from typing import Any
 from collections import deque
 import bpy
 
-import auto_texture_baker.src.material_system as material_system
-import auto_texture_baker.src.utils as utils
+import texture_patisserie.src.material_system as material_system
+import texture_patisserie.src.utils as utils
 
 
 class MaterialEditor: 
