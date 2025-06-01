@@ -1,9 +1,13 @@
-# TEXTURE PATISSERIE - Blender Add-on
+# Texture Patisserie - Blender Add-on
 
 A Blender Add-on for streamlining the process of baking and exporting materials to PBR textures in a few clicks.
 
+<p align="center">
+    <img src="images/bake_screen.png" width="480">
+</p>
 
----- 
+
+## Installation 
 
 ## Supported Features 
 
@@ -23,16 +27,17 @@ A Blender Add-on for streamlining the process of baking and exporting materials 
 | Output directory creation | Create subdirectories for both batch and separate baking mode if used | 0.0.2 | |
 -------
 
-# Future plans
-- Multires
-- MultiUV 
+## Demos
+
+### Future plans
+- Hi-poly -> low-poly baking
 - Normals swizzle
 - Channel Packing 
 - Bake Queue and presets
 
-# Issues 
+### Known Issues 
 - Export format issue
 - The nodes going into different output cannot be the same otherwise there will be issues when rewrangling internally
 
 
-This extension is still being maintained, I will be adding more features whenever I am free or in need of some specific functionalities!
+※This add-on is still being maintained, I will be adding more features whenever I am free or in need of some specific functionalities!
