@@ -80,11 +80,16 @@ Currently I find the add-on yet to be big enough to warrant a proper documentati
     <img src="images/ui_demo/bake_group_settings.png" width="480">
 </p>
 
-
+- The `Bake Selected Maps` button will start the baking process based on the user's configurations.
+- The drop down menu under `Bake Grouping Options` determines which bake option to use, currently 2 are available.
+    1. Bake Batch: Bakes every object selected into the same texture. Each texture type are not baked into each other. (eg: metallic and normals are separated but object A and B are merged.)
+    2. Bake Sepated Object: Bakes every object selected into separated texture but their materials together.
+    
 ### Texture Settings
 <p align="center">
     <img src="images/ui_demo/texture_maps.png" width="480">
 </p>
+
 
 ### Output Settings
 <p align="center">
