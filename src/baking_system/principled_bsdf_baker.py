@@ -71,7 +71,6 @@ class PrincipledBSDFBaker:
                 self.material_editor.add_texture_to_nodes(duplicate_materials,bake_image)
 
                 self._rewrangle_metallic_nodes(bake_name, duplicate_materials)
-   
             # Baking routine
             err_msg = self._bake_routine(bake_type, pass_filter, cfg.bake_height, cfg.bake_width)
             if not err_msg is None:

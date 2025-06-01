@@ -32,6 +32,11 @@ class TextureManager:
         texture(bpy.types.Image)                                :   Image texture
         """
         # print(FILE_TYPE_EXT[file_type]) #DEBUG
+        output_path = cfg.output_path
+
+        # Resolve absolute path
+        if(output_path.startswith("//")):
+            output_path = bpy.path.abspath(output_path)
 
         # Verify if the texture is exists
         if not texture:
@@ -39,11 +44,10 @@ class TextureManager:
 
         # Create file path 
         texture_name = utils.build_texture_name(cfg, bake_type, obj_name)
-        output_path = cfg.output_path
 
         if cfg.create_subdirectory: 
             subdir_name = utils.build_dir_name(cfg, obj_name)
-            output_path = os.path.join(cfg.output_path, subdir_name)
+            output_path = os.path.join(output_path, subdir_name)
 
             # Create subdirectory
             status, err = utils.create_save_directory(output_path)
@@ -58,7 +62,6 @@ class TextureManager:
                 file_path = os.path.join(output_path, f"{texture_name}{cfg.output_name_separator}{counter}{FILE_TYPE_EXT[file_type]}")
                 counter+= 1
         
-
         texture.filepath_raw = file_path
         texture.save()
 
