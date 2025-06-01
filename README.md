@@ -2,6 +2,7 @@
 
 [//]: # (Shields basic info setup)
 [shield-release-date]:https://img.shields.io/badge/release_date-2025.06.01-blue
+[shield-current-blender-version]:https://img.shields.io/badge/blender_version-4.4.0-red
 
 [//]: # (Shields status setup)
 [shield-compatible]:https://img.shields.io/badge/compatible-green
@@ -21,7 +22,7 @@
 [v0.0.1]:v0.0.1
 [v0.0.2]:v0.0.2
 
-![v0.0.2][shield-version-0.0.2] ![2025.06.01][shield-release-date]
+![v0.0.2][shield-version-0.0.2] ![2025.06.01][shield-release-date] ![4.4.0][shield-current-blender-version]
 
 A Blender Add-on for streamlining the process of baking and exporting materials to PBR textures in a few clicks.
 
