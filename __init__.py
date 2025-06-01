@@ -5,7 +5,7 @@ TEXTURE PATISSERIE - BLENDER ADDON
 bl_info = {
     "name": "Texture Patisserie",
     "author": "maythas_w maythas.wangcharoenwong@gmail.com",
-    "version": (0,0,2),
+    "version": (0,0,3),
     "blender": (2,8,0),
     "description" : "A Blender Add-on for streamlining the process of baking and exporting materials to PBR textures in a few clicks.",
     "category" : "Material",

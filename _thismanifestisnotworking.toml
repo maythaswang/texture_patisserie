@@ -1,6 +1,6 @@
 schema_version = "1.0.0"
 id = "texture_patisserie"
-version = "0.0.2"
+version = "0.0.3"
 name = "Texture Patisserie"
 tagline = "Baking materials to PBR textures and export in a few clicks"
 maintainer = "maythas_w <maythas.wangcharoenwong@gmail.com>"
