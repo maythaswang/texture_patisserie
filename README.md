@@ -22,13 +22,10 @@
 [v0.0.1]:v0.0.1
 [v0.0.2]:v0.0.2
 
-![v0.0.2][shield-version-0.0.2] ![2025.06.01][shield-release-date] ![4.4.0][shield-current-blender-version]
+![v0.0.2][shield-version-0.0.2] ![2025.06.01][shield-release-date] ![4.4.0][shield-current-blender-version] 
 
 A Blender Add-on for streamlining the process of baking and exporting materials to PBR textures in a few clicks. 
-
 Instead of rewrangling nodes and creating textures one by one, you can now batch export materials of your desire as PBR textures ready for use in your preferred game engine!
-
-
 
 ※This add-on is still being maintained, I will be adding more features whenever I am free or in need of some specific functionalities! :)
 
@@ -40,10 +37,11 @@ Instead of rewrangling nodes and creating textures one by one, you can now batch
 This addon works for blender version 4.4.0 and should be backward compatible. 
 However, I haven't checked other for other versions yet since this add-on was initially created for personal use only. 
 
-
 |Blender version| Add-on Version | Status| 
 | ---- | --- | ---- |
 | ![4.4.0][shield-current-blender-version] | ![v0.0.2][shield-version-0.0.2] | ![compatible][shield-compatible] |
+
+
 
 ## Supported Features 
 
@@ -62,8 +60,9 @@ However, I haven't checked other for other versions yet since this add-on was in
 | Versioning naming convention                 | Use user specified suffixes when duplicated textures are saved to device                        | ![v0.0.2][shield-version-0.0.2] | ![active][shield-active]    |
 | Output directory creation                    | Create subdirectories for both batch and separate baking mode if used                           | ![v0.0.2][shield-version-0.0.2] | ![active][shield-active]    |
 -------
+
 ## Installation and Usage
-Simply download the latest release (will be up soon)
+Simply download the latest release [here](https://github.com/maythaswang/texture_patisserie/releases/tag/v0.0.2])
 
 Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dropdown icon and select `Install from disk` then select the zip file containing the add-on.
 
@@ -73,11 +72,10 @@ Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dro
 
 After the installation is complete, you can find the addon under `Properties Panel > Render > Texture Patisserie` and you are now ready to go!
 
-## UI
 
-## Documentation
+### UI
 
-## Demos
+### Demos
 
 ## Known Issues 
 - Export format doesn't conform fully to the specified format.
