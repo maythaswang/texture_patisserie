@@ -12,7 +12,8 @@
 
 [//]: # (Shields version setup)
 [shield-version-0.0.1]:https://img.shields.io/badge/version-0.0.1-blue
-[shield-version-0.0.2]:https://img.shields.io/badge/version-0.0.2-important
+[shield-version-0.0.2]:https://img.shields.io/badge/version-0.0.2-blue
+[shield-version-0.0.3]:https://img.shields.io/badge/version-0.0.3-important
 
 [//]: # (Alt texts)
 [compatible]:compatible
@@ -21,8 +22,9 @@
 [disabled]:disabled
 [v0.0.1]:v0.0.1
 [v0.0.2]:v0.0.2
+[v0.0.2]:v0.0.3
 
-![v0.0.2][shield-version-0.0.2] ![2025.06.01][shield-release-date] ![4.4.0][shield-current-blender-version] 
+![v0.0.3][shield-version-0.0.3] ![2025.06.01][shield-release-date] ![4.4.0][shield-current-blender-version] 
 
 A Blender Add-on for streamlining the process of baking and exporting materials to PBR textures in a few clicks. 
 Instead of rewrangling nodes and creating textures one by one, you can now batch export materials of your desire as PBR textures ready for use in your preferred game engine!
@@ -39,7 +41,7 @@ However, I haven't checked other for other versions yet since this add-on was in
 
 |Blender version| Add-on Version | Status| 
 | ---- | --- | ---- |
-| ![4.4.0][shield-current-blender-version] | ![v0.0.2][shield-version-0.0.2] | ![compatible][shield-compatible] |
+| ![4.4.0][shield-current-blender-version] | ![v0.0.3][shield-version-0.0.3] | ![compatible][shield-compatible] |
 
 ## Supported Features 
 
@@ -59,7 +61,7 @@ However, I haven't checked other for other versions yet since this add-on was in
 | Output directory creation                    | Create subdirectories for both batch and separate baking mode if used                           | ![v0.0.2][shield-version-0.0.2] | ![active][shield-active]    |
 -------
 
-## Known Issues for v0.0.2
+## Known Issues for v0.0.3
 - Export format doesn't conform fully to the specified format.
 - The nodes going into different output cannot be the same otherwise there will be issues when rewrangling internally. Right now consider making 
 - Having image texture nodes going directly into the BSDF node will cause overwriting issues for **separated** mode due to nodes being rewrangled. For batch mode, it works fine.
@@ -68,7 +70,7 @@ However, I haven't checked other for other versions yet since this add-on was in
 **Quick note:** Right now the baking process is a blocking call, meaning that there will be a bit of freezing when baking, do not panick for the system is not actually crashing.
 
 # Installation and Usage
-Simply download the latest release [here](https://github.com/maythaswang/texture_patisserie/releases/tag/v0.0.2)
+Simply download the latest release [here](https://github.com/maythaswang/texture_patisserie/releases/tag/v0.0.3)
 
 Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dropdown icon and select `Install from disk` then select the zip file containing the add-on.
 
