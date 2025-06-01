@@ -24,7 +24,11 @@
 
 ![v0.0.2][shield-version-0.0.2] ![2025.06.01][shield-release-date] ![4.4.0][shield-current-blender-version]
 
-A Blender Add-on for streamlining the process of baking and exporting materials to PBR textures in a few clicks.
+A Blender Add-on for streamlining the process of baking and exporting materials to PBR textures in a few clicks. 
+
+Instead of rewrangling nodes and creating textures one by one, you can now batch export materials of your desire as PBR textures ready for use in your preferred game engine!
+
+
 
 ※This add-on is still being maintained, I will be adding more features whenever I am free or in need of some specific functionalities! :)
 
@@ -39,7 +43,7 @@ However, I haven't checked other for other versions yet since this add-on was in
 
 |Blender version| Add-on Version | Status| 
 | ---- | --- | ---- |
-|4.4.0 | ![v0.0.2][shield-version-0.0.2] | ![compatible][shield-compatible] |
+| ![4.4.0][shield-current-blender-version] | ![v0.0.2][shield-version-0.0.2] | ![compatible][shield-compatible] |
 
 ## Supported Features 
 
@@ -68,6 +72,10 @@ Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dro
 </p>
 
 After the installation is complete, you can find the addon under `Properties Panel > Render > Texture Patisserie` and you are now ready to go!
+
+## UI
+
+## Documentation
 
 ## Demos
 
