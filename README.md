@@ -41,8 +41,6 @@ However, I haven't checked other for other versions yet since this add-on was in
 | ---- | --- | ---- |
 | ![4.4.0][shield-current-blender-version] | ![v0.0.2][shield-version-0.0.2] | ![compatible][shield-compatible] |
 
-**Quick note:** Right now the baking process is a blocking call, meaning that there will be a bit of freezing when baking, do not panick for the system is not actually crashing.
-
 ## Supported Features 
 
 |Name                                          | Description | Version | Status| 
@@ -60,6 +58,14 @@ However, I haven't checked other for other versions yet since this add-on was in
 | Versioning naming convention                 | Use user specified suffixes when duplicated textures are saved to device                        | ![v0.0.2][shield-version-0.0.2] | ![active][shield-active]    |
 | Output directory creation                    | Create subdirectories for both batch and separate baking mode if used                           | ![v0.0.2][shield-version-0.0.2] | ![active][shield-active]    |
 -------
+
+## Known Issues for v0.0.2
+- Export format doesn't conform fully to the specified format.
+- The nodes going into different output cannot be the same otherwise there will be issues when rewrangling internally. Right now consider making 
+- Having image texture nodes going directly into the BSDF node will cause overwriting issues for **separated** mode due to nodes being rewrangled. For batch mode, it works fine.
+- Performance issue: Baking sometimes takes too long
+
+**Quick note:** Right now the baking process is a blocking call, meaning that there will be a bit of freezing when baking, do not panick for the system is not actually crashing.
 
 # Installation and Usage
 Simply download the latest release [here](https://github.com/maythaswang/texture_patisserie/releases/tag/v0.0.2)
@@ -136,14 +142,19 @@ For versioning
 - Subdirectories can also be created both for normal version and batch version *(Currently there is no versioning available for subdirectories)*
 
 ## Example Usage
+<p align="center">
+    <img src="images/demo_usage.gif" width="512">
+    <br>
+    Quick Demo (sorry for low res)
+</p>
 
-## Known Issues 
-- Export format doesn't conform fully to the specified format.
-- The nodes going into different output cannot be the same otherwise there will be issues when rewrangling internally. Right now consider making 
+<p align="center">
+    <img src="images/sample_output.png" width="512">
+    <br>
+    Demo use case
+</p>
 
 ## Notes
-
-
 
 In case anyone wants to go through the code. Most files are documented with docstrings, I did try to be as detailed as possible but there are still some disrepancy in conventions between some files so please do we aware of that.
 
