@@ -1,5 +1,13 @@
 # Texture Patisserie - Blender Add-on
 
+[//]: # (Shields setup)
+[shield-compatible]:https://img.shields.io/badge/compatible-green
+[shield-incompatible]:https://img.shields.io/badge/incompatible-red
+[shield-active]:https://img.shields.io/badge/active-green
+[shield-disabled]:https://img.shields.io/badge/disabled-red
+
+
+
 A Blender Add-on for streamlining the process of baking and exporting materials to PBR textures in a few clicks.
 
 <p align="center">
@@ -10,26 +18,27 @@ A Blender Add-on for streamlining the process of baking and exporting materials 
 This addon works for blender version 4.4.0 and should be backward compatible. 
 However, I haven't checked other for other versions yet since this add-on was initially created for personal use only. 
 
+
 |Blender version| Add-on Version | Status| 
 | ---- | --- | ---- |
-|4.4.0 | 0.0.2 | Compatible |
+|4.4.0 | 0.0.2 | ![][shield-compatible] |
 
 ## Supported Features 
 
-|Name| Description | Version | Status| 
+|Name                                          | Description | Version | Status| 
 |---|---|---|---|
-| PBR texture baking | Bake materials into metallic, roughness, albedo, normal maps (more coming soon) | 0.0.1 | Active | 
-| Principled BSDF baking | Bake materials that uses Principled BSDF. | 0.0.2  |   |
-| Single shader material baking | Bake materials with only one shader node.  |  0.0.2 |   | 
-| Texture Export | Saves texture to defined directory when write to device. | 0.0.2 | |
-| Batch baking | Baking multiple objects into one texture image for creating texture atlas | 0.0.2 | | 
-| Separate object baking | Baking multiple objects into each of their own texture image | 0.0.2 | |
-| Separate material baking | Baking multiple objects and each of their material separately into their own texture image | 0.0.1 | Inactive | 
-| Texture Output configurations | Supports selecting render device, samples, resolution, filetype, alpha channel, texture margins | 0.0.2 | Active |   
-| Modifiable naming convention and Presets | User adjustable naming conventions based on the provided presets. | 0.0.2 | Active |
-| Batch naming convention | Allow overriding default object name for batches | 0.0.2 | |
-| Versioning naming convention | Use user specified suffixes when duplicated textures are saved to device | 0.0.2 ||
-| Output directory creation | Create subdirectories for both batch and separate baking mode if used | 0.0.2 | |
+| PBR texture baking                           | Bake materials into metallic, roughness, albedo, normal maps (more coming soon)                 | 0.0.1 | ![][shield-active]    | 
+| Principled BSDF baking                       | Bake materials that uses Principled BSDF.                                                       | 0.0.2 | ![][shield-active]    |
+| Single shader material baking                | Bake materials with only one shader node.                                                       | 0.0.2 | ![][shield-active]    | 
+| Texture Export                               | Saves texture to defined directory when write to device.                                        | 0.0.2 | ![][shield-active]    |
+| Batch baking                                 | Baking multiple objects into one texture image for creating texture atlas                       | 0.0.2 | ![][shield-active]    | 
+| Separate object baking                       | Baking multiple objects into each of their own texture image                                    | 0.0.2 | ![][shield-active]    |
+| Separate material baking                     | Baking multiple objects and each of their material separately into their own texture image      | 0.0.1 | ![][shield-disabled]  | 
+| Texture Output configurations                | Supports selecting render device, samples, resolution, filetype, alpha channel, texture margins | 0.0.2 | ![][shield-active]    |   
+| Modifiable naming convention and Presets     | User adjustable naming conventions based on the provided presets.                               | 0.0.2 | ![][shield-active]    |
+| Batch naming convention                      | Allow overriding default object name for batches                                                | 0.0.2 | ![][shield-active]    |
+| Versioning naming convention                 | Use user specified suffixes when duplicated textures are saved to device                        | 0.0.2 | ![][shield-active]    |
+| Output directory creation                    | Create subdirectories for both batch and separate baking mode if used                           | 0.0.2 | ![][shield-active]    |
 -------
 ## Installation and Usage
 Simply download the latest release (will be up soon)
