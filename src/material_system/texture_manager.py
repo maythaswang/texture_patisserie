@@ -59,7 +59,7 @@ class TextureManager:
         if not cfg.overwrite_previous_save:
             counter = 1
             while(os.path.exists(file_path)):
-                file_path = os.path.join(output_path, f"{texture_name}{cfg.output_name_separator}{counter}{FILE_TYPE_EXT[file_type]}")
+                file_path = os.path.join(output_path, f"{texture_name}{cfg.output_name_separator}{cfg.file_versioning_suffix}{counter}{FILE_TYPE_EXT[file_type]}")
                 counter+= 1
         
         texture.filepath_raw = file_path
