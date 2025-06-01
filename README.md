@@ -62,7 +62,7 @@ However, I haven't checked other for other versions yet since this add-on was in
 -------
 
 ## Installation and Usage
-Simply download the latest release [here](https://github.com/maythaswang/texture_patisserie/releases/tag/v0.0.2])
+Simply download the latest release [here](https://github.com/maythaswang/texture_patisserie/releases/tag/v0.0.2)
 
 Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dropdown icon and select `Install from disk` then select the zip file containing the add-on.
 
