@@ -61,7 +61,7 @@ However, I haven't checked other for other versions yet since this add-on was in
 | Output directory creation                    | Create subdirectories for both batch and separate baking mode if used                           | ![v0.0.2][shield-version-0.0.2] | ![active][shield-active]    |
 -------
 
-## Installation and Usage
+# Installation and Usage
 Simply download the latest release [here](https://github.com/maythaswang/texture_patisserie/releases/tag/v0.0.2)
 
 Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dropdown icon and select `Install from disk` then select the zip file containing the add-on.
@@ -73,9 +73,30 @@ Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dro
 After the installation is complete, you can find the addon under `Properties Panel > Render > Texture Patisserie` and you are now ready to go!
 
 
-### UI
+## UI
+Currently I find the add-on yet to be big enough to warrant a proper documentation. With that being said, you can refer to the UI and description below!
+### Bake Group Settings
+<p align="center">
+    <img src="images/ui_demo/bake_group_settings.png" width="480">
+</p>
 
-### Demos
+
+### Texture Settings
+<p align="center">
+    <img src="images/ui_demo/texture_maps.png" width="480">
+</p>
+
+### Output Settings
+<p align="center">
+    <img src="images/ui_demo/output_render_settings.png" width="480">
+</p>
+
+### Naming and Versioning
+<p align="center">
+    <img src="images/ui_demo/naming_and_versioning.png" width="480">
+</p>
+
+## Example Usage
 
 ## Known Issues 
 - Export format doesn't conform fully to the specified format.
@@ -88,6 +109,7 @@ After the installation is complete, you can find the addon under `Properties Pan
 In case anyone wants to go through the code. Most files are documented with docstrings, I did try to be as detailed as possible but there are still some disrepancy in conventions between some files so please do we aware of that.
 
 ### Future plans (No promises)
+- Restructuring the UI 
 - Normals swizzle based on engine
 - High to Low-poly baking
 - Bake Queue and presets
