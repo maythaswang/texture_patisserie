@@ -7,7 +7,16 @@ A Blender Add-on for streamlining the process of baking and exporting materials 
 </p>
 
 
-## Installation 
+## Installation and Usage
+Simply download the latest release (will be up soon)
+
+Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dropdown icon and select `Install from disk` then select the zip file containing the add-on.
+
+<p align="center">
+    <img src="images/install_process.png" width="480">
+</p>
+
+After the installation is complete, you can find the addon under `Properties Panel > Render > Texture Patisserie` and you are now ready to go!
 
 ## Supported Features 
 
@@ -29,15 +38,16 @@ A Blender Add-on for streamlining the process of baking and exporting materials 
 
 ## Demos
 
-### Future plans
-- Hi-poly -> low-poly baking
-- Normals swizzle
-- Channel Packing 
-- Bake Queue and presets
+## Known Issues 
+- Export format doesn't conform fully to the specified format.
+- The nodes going into different output cannot be the same otherwise there will be issues when rewrangling internally. Right now consider making 
 
-### Known Issues 
-- Export format issue
-- The nodes going into different output cannot be the same otherwise there will be issues when rewrangling internally
-
+## Notes
 
 ※This add-on is still being maintained, I will be adding more features whenever I am free or in need of some specific functionalities!
+
+### Future plans (No promises)
+- Normals swizzle based on engine
+- High to Low-poly baking
+- Bake Queue and presets
+- Channel Packing 
