@@ -41,7 +41,7 @@ However, I haven't checked other for other versions yet since this add-on was in
 | ---- | --- | ---- |
 | ![4.4.0][shield-current-blender-version] | ![v0.0.2][shield-version-0.0.2] | ![compatible][shield-compatible] |
 
-
+**Quick note:** Right now the baking process is a blocking call, meaning that there will be a bit of freezing when baking, do not panick for the system is not actually crashing.
 
 ## Supported Features 
 
