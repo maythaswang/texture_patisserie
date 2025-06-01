@@ -56,4 +56,7 @@ After the installation is complete, you can find the addon under `Properties Pan
 - Normals swizzle based on engine
 - High to Low-poly baking
 - Bake Queue and presets
-- Channel Packing 
+- Channel Packing
+
+## License 
+This project is distributed under [GPL-v3.0](LICENSE)
