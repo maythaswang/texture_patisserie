@@ -6,17 +6,13 @@ A Blender Add-on for streamlining the process of baking and exporting materials 
     <img src="images/bake_screen.png" width="480">
 </p>
 
+## Version Compatibility
+This addon works for blender version 4.4.0 and should be backward compatible. 
+However, I haven't checked other for other versions yet since this add-on was initially created for personal use only. 
 
-## Installation and Usage
-Simply download the latest release (will be up soon)
-
-Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dropdown icon and select `Install from disk` then select the zip file containing the add-on.
-
-<p align="center">
-    <img src="images/install_process.png" width="480">
-</p>
-
-After the installation is complete, you can find the addon under `Properties Panel > Render > Texture Patisserie` and you are now ready to go!
+|Blender version| Add-on Version | Status| 
+| ---- | --- | ---- |
+|4.4.0 | 0.0.2 | Compatible |
 
 ## Supported Features 
 
@@ -35,6 +31,16 @@ After the installation is complete, you can find the addon under `Properties Pan
 | Versioning naming convention | Use user specified suffixes when duplicated textures are saved to device | 0.0.2 ||
 | Output directory creation | Create subdirectories for both batch and separate baking mode if used | 0.0.2 | |
 -------
+## Installation and Usage
+Simply download the latest release (will be up soon)
+
+Afterwards, open blender and go to `Edit > Preferences > Add-ons`. Click the dropdown icon and select `Install from disk` then select the zip file containing the add-on.
+
+<p align="center">
+    <img src="images/install_process.png" width="480">
+</p>
+
+After the installation is complete, you can find the addon under `Properties Panel > Render > Texture Patisserie` and you are now ready to go!
 
 ## Demos
 
