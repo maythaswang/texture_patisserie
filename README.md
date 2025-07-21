@@ -31,6 +31,8 @@ Instead of rewrangling nodes and creating textures one by one, you can now batch
 
 ※This add-on is still being maintained, I will be adding more features whenever I am free or in need of some specific functionalities! :)
 
+※ [Page here!](https://maythaswang.github.io/posts/003_texture_patisserie/)
+
 <p align="center">
     <img src="images/bake_screen.png" width="480">
 </p>
